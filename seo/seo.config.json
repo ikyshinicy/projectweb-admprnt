@@ -1,0 +1,74 @@
+{
+  "_catatan": "SATU file kontrol SEO. Edit di sini lalu jalankan: node scripts/build-seo.js",
+
+  "site": {
+    "url": "https://example.com",
+    "_url_catatan": "TODO: ganti dengan domain asli, tanpa garis miring di akhir",
+    "name": "ADAM XII PRINTING",
+    "language": "id",
+    "locale": "id_ID",
+    "themeColor": "#087FA8"
+  },
+
+  "indexing": {
+    "allow": false,
+    "_catatan": "false = situs dikunci dari Google (noindex) selama masih pengembangan. Ubah ke true saat resmi online."
+  },
+
+  "page": {
+    "path": "/",
+    "title": "ADAM XII PRINTING — Percetakan & Reklame di Sorong",
+    "description": "Percetakan & reklame di Sorong: kartu nama, brosur, banner, stempel, stiker, huruf timbul, neonbox, dan souvenir. Hasil berkualitas, harga terjangkau.",
+    "keywords": [
+      "percetakan Sorong",
+      "reklame Sorong",
+      "cetak banner Sorong",
+      "cetak kartu nama Sorong",
+      "stempel Sorong",
+      "neonbox Sorong",
+      "huruf timbul Sorong",
+      "cetak stiker Sorong"
+    ]
+  },
+
+  "social": {
+    "ogImage": "/assets/images/og/og-cover.jpg",
+    "ogImageAlt": "ADAM XII PRINTING — Percetakan & Reklame Sorong",
+    "ogImageWidth": 1200,
+    "ogImageHeight": 630,
+    "twitterCard": "summary_large_image"
+  },
+
+  "verification": {
+    "googleSearchConsole": "",
+    "_catatan": "Isi kode dari tag 'google-site-verification' (hanya isi content-nya)."
+  },
+
+  "analytics": {
+    "googleAnalyticsId": "",
+    "_catatan": "Contoh: G-XXXXXXXXXX. Kosongkan kalau tidak dipakai."
+  },
+
+  "business": {
+    "_catatan": "Dipakai untuk schema LocalBusiness. Kosongkan field yang belum ada — akan dilewati otomatis.",
+    "type": "PrintShop",
+    "name": "ADAM XII PRINTING",
+    "description": "Percetakan dan reklame di Sorong untuk kebutuhan personal, instansi, UMKM, dan perusahaan.",
+    "telephone": "",
+    "email": "",
+    "priceRange": "",
+    "logo": "/assets/images/brand/logo.png",
+    "image": "/assets/images/og/og-cover.jpg",
+    "address": {
+      "streetAddress": "",
+      "addressLocality": "Sorong",
+      "addressRegion": "Papua Barat Daya",
+      "postalCode": "",
+      "addressCountry": "ID"
+    },
+    "geo": { "latitude": null, "longitude": null },
+    "openingHours": [],
+    "_openingHours_contoh": "[\"Mo-Sa 08:00-17:00\"]",
+    "sameAs": []
+  }
+}

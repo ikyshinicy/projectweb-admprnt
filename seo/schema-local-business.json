@@ -1,0 +1,19 @@
+{
+  "@context": "https://schema.org",
+  "@type": "PrintShop",
+  "name": "ADAM XII PRINTING",
+  "description": "Percetakan dan reklame di Sorong untuk kebutuhan personal, instansi, UMKM, dan perusahaan.",
+  "url": "https://example.com/",
+  "logo": "https://example.com/assets/images/brand/logo.png",
+  "image": "https://example.com/assets/images/og/og-cover.jpg",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Sorong",
+    "addressRegion": "Papua Barat Daya",
+    "addressCountry": "ID"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Sorong"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "ADAM XII PRINTING",
+  "short_name": "ADAM XII",
+  "description": "Percetakan & reklame di Sorong: kartu nama, brosur, banner, stempel, stiker, huruf timbul, neonbox, dan souvenir. Hasil berkualitas, harga terjangkau.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#087FA8",
+  "lang": "id",
+  "icons": [
+    {
+      "src": "/assets/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
