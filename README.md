@@ -29,7 +29,7 @@ assets/images/        semua gambar, dikelompokkan per section
 ```
 assets/favicon.png                       512x512
 assets/images/brand/logo.png
-assets/images/hero/hero-toko.png
+assets/images/hero/toko-hero.png
 assets/images/layanan/kartu-nama.png
 assets/images/layanan/brosur-flyer.png
 assets/images/layanan/banner-spanduk.png
