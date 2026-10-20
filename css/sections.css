@@ -5,12 +5,11 @@
 /* ---------- Hero ---------- */
 .hero {
   position: relative; overflow: hidden;
-  background: var(--gradient-hero);
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.96) 0%, rgba(255,255,255,.85) 38%, rgba(255,255,255,0) 62%),
+    url("../assets/images/hero/toko-hero.webp") right center / cover no-repeat,
+    var(--gradient-hero);
   padding: 56px 0 64px;
-}
-.hero::before {
-  content: ""; position: absolute; width: 560px; height: 560px; border-radius: 50%;
-  background: rgba(18, 182, 202, .10); right: -160px; top: -250px;
 }
 .hero::after {
   content: ""; position: absolute; width: 460px; height: 170px; border-radius: 50%;
@@ -18,8 +17,9 @@
 }
 .hero-grid {
   position: relative; z-index: 2;
-  display: grid; grid-template-columns: 1fr 1.05fr; gap: 40px; align-items: center;
+  display: grid; grid-template-columns: 1fr; align-items: center;
 }
+.hero-text { max-width: 580px; }
 .eyebrow {
   font-size: 13px; font-weight: 800; letter-spacing: 4px;
   color: var(--primary-blue); margin-bottom: 16px; text-transform: uppercase;
@@ -37,11 +37,6 @@
 .point b { display: block; font-size: 12.5px; line-height: 1.25; }
 .point small { display: block; font-size: 11px; color: var(--text-secondary); margin-top: 3px; }
 
-.hero-visual {
-  border-radius: 40px;
-  display: grid; place-items: center;
-}
-.hero-visual img { width: 100%; height: auto; object-fit: contain; border-radius: 0; }
 
 /* ---------- Layanan ---------- */
 .services { background: var(--soft-gray); }

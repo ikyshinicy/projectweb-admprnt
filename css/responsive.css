@@ -15,7 +15,13 @@
   .menu-toggle { display: inline-flex; }
 
   .hero-grid, .about-grid { grid-template-columns: 1fr; }
-  .hero-visual { min-height: 0; order: -1; }
+  .hero {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,.82) 100%),
+      url("../assets/images/hero/toko-hero.webp") 75% center / cover no-repeat,
+      var(--gradient-hero);
+  }
+  .hero-text { max-width: none; }
   .hero-points { grid-template-columns: repeat(2, 1fr); }
   .service-grid { grid-template-columns: repeat(2, 1fr); }
   .section-head { flex-wrap: wrap; }
