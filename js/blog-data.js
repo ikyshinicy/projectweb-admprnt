@@ -20,15 +20,18 @@
                kalau kosong, sampul diambil otomatis dari YouTube (khusus YouTube)
      Video diputar langsung di halaman ini (tidak pindah ke YouTube).
 
-     Instagram & TikTok juga bisa, tampil PORTRAIT (9:16) di baris sendiri di bawah video YouTube:
+     Instagram, TikTok & Facebook juga bisa, tampil PORTRAIT (9:16) di baris sendiri di bawah video YouTube:
        Instagram  tempel link reel/post: instagram.com/reel/XXXX/ atau instagram.com/p/XXXX/
                   (akun harus publik; link profil @akun tidak bisa)
        TikTok     tempel link LENGKAP: tiktok.com/@akun/video/1234567890123456789
                   (link pendek vm.tiktok.com / vt.tiktok.com TIDAK bisa; buka dulu, lalu salin link lengkapnya)
+       Facebook   tempel link reel: facebook.com/reel/XXXX atau link bagikan facebook.com/share/r/XXXX/
+                  (video harus publik; kalau tidak tampil, buka link-nya di browser, lalu salin alamat
+                  akhirnya yang berbentuk facebook.com/reel/angka)
        YouTube Shorts (youtube.com/shorts/...) otomatis ikut portrait.
-     Instagram & TikTok tidak punya sampul otomatis: isi `thumb` sendiri
+     Instagram, TikTok & Facebook tidak punya sampul otomatis: isi `thumb` sendiri
      (mis. "assets/images/blog/reel-1.webp"), kalau kosong tampil ikon placeholder.
-     Catatan: setelah klik putar, pemutar Instagram/TikTok bisa minta klik putar sekali lagi.
+     Catatan: setelah klik putar, pemutar Instagram/TikTok/Facebook bisa minta klik putar sekali lagi.
      format    (opsional) paksa "portrait" atau "landscape", mis. untuk placeholder yang belum ada link.
 
    ---------- ARTIKEL dari web ----------

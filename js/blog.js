@@ -1,6 +1,6 @@
 /* ==========================================================
    blog.js — halaman Blog: video (atas) + artikel web (bawah)
-   Video: YouTube (landscape), Instagram & TikTok (portrait).
+   Video: YouTube (landscape), Instagram / TikTok / Facebook Reels (portrait).
    Data dari js/blog-data.js. Tombol filter kategori berlaku untuk keduanya.
    Bisa dibuka langsung lewat  blog/#reklame  (id = id kategori).
    ========================================================== */
@@ -95,12 +95,32 @@
     return m ? { kind: "tiktok", label: "TikTok", id: m[1], portrait: true } : null;
   }
 
+  /* ---------- Facebook (reel / video) ---------- */
+  function parseFacebook(input) {
+    var s = String(input || "").trim();
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+    var u;
+    try { u = new URL(s); } catch (e) { return null; }
+    var h = u.hostname.replace(/^www\.|^m\.|^web\.|^mbasic\./, "");
+    if (h !== "facebook.com" && h !== "fb.com" && h !== "fb.watch") return null;
+    var path = u.pathname;
+    var isVideo = h === "fb.watch" ? path.length > 1
+      : /^\/(reels?|share\/[rv]|watch|[^/]+\/videos|video\.php)(\/|$)/.test(path) || /\/videos\/\d+/.test(path);
+    if (!isVideo) return null;   // mis. link profil / halaman tidak bisa di-embed
+    var href = (h === "fb.watch" ? "https://fb.watch" : "https://www.facebook.com") + path;   // m./web. dinormalkan ke www.
+    var v = u.searchParams.get("v");
+    if (v) href += "?v=" + encodeURIComponent(v);   // /watch?v=... dan video.php?v=... butuh parameter v
+    var portrait = /^\/(reels?|share\/r)(\/|$)/.test(path);
+    return { kind: "facebook", label: "Facebook", id: href, portrait: portrait };
+  }
+
   /* Deteksi platform dari link */
   function parseVideo(input) {
     var s = String(input || "").trim();
     if (!s) return null;
     if (/instagram\.com|instagr\.am/i.test(s)) return parseInstagram(s);
     if (/tiktok\.com/i.test(s)) return parseTikTok(s);
+    if (/facebook\.com|fb\.com|fb\.watch/i.test(s)) return parseFacebook(s);
     return parseYouTube(s);
   }
 
@@ -161,6 +181,10 @@
       f.src = "https://www.instagram.com/" + yt.path + "/" + encodeURIComponent(yt.id) + "/embed/";
       f.setAttribute("scrolling", "no");
       f.allow = "encrypted-media; fullscreen; clipboard-write";
+    } else if (yt.kind === "facebook") {
+      f.src = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(yt.id) + "&show_text=false&autoplay=true";
+      f.setAttribute("scrolling", "no");
+      f.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen";
     } else if (yt.kind === "tiktok") {
       f.src = "https://www.tiktok.com/embed/v2/" + encodeURIComponent(yt.id);
       f.setAttribute("scrolling", "no");
@@ -187,7 +211,7 @@
     var vid = parseVideo(v.url);
     if (v.url && !vid && window.console) {
       console.warn("[blog] Link video tidak valid / tidak didukung:", v.url, "di video", v.title,
-        "(didukung: YouTube, Instagram reel/post, TikTok link lengkap .../video/angka)");
+        "(didukung: YouTube, Instagram reel/post, TikTok link lengkap .../video/angka, Facebook reel/video)");
     }
     var portrait = isPortrait(v, vid);
     var card = el("article", "card post video-card" + (portrait ? " video-card--portrait" : ""));
