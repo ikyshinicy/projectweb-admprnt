@@ -6,8 +6,20 @@
 
 .gallery-page { padding-top: 44px; }
 
-/* ---------- Filter kategori ---------- */
-.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+/* ---------- Filter: tab bidang + chip kategori ---------- */
+.filters { margin-bottom: 30px; }
+.gtabs, .filters-sub { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters-sub { margin-top: 12px; }
+.gtab { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; font-size: 15px; }
+.gtab-n {
+  min-width: 22px; padding: 1px 7px; border-radius: var(--radius-pill);
+  background: var(--light-cyan); color: var(--primary-blue); font-size: 12px; text-align: center;
+}
+.gtab[aria-pressed="true"] .gtab-n { background: rgba(255, 255, 255, .25); color: var(--white); }
+.filters-sub .chip { padding: 7px 14px; font-size: 13px; }
+.filters-sub .chip[aria-pressed="true"] {
+  background: var(--light-cyan); color: var(--primary-blue); border-color: var(--primary-cyan);
+}
 
 /* ---------- Grid & kartu album ---------- */
 .album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px 22px; }
@@ -103,3 +115,47 @@
 .lb-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
 .lb-wa { align-self: flex-start; margin: 0 4px 4px; }
+
+/* ---------- Video (YouTube) ---------- */
+.album-play, .lb-play {
+  display: grid; place-items: center; border-radius: 50%;
+  background: rgba(255, 255, 255, .94); color: var(--accent-orange);
+  box-shadow: 0 8px 24px rgba(3, 44, 76, .35);
+}
+.album-play svg, .lb-play svg { fill: currentColor; margin-left: 3px; }
+
+/* Tombol putar di tengah sampul kartu */
+.album-play {
+  position: absolute; z-index: 1; top: 50%; left: 50%; width: 58px; height: 58px;
+  transform: translate(-50%, -50%); transition: transform .25s ease; pointer-events: none;
+}
+.album-play svg { width: 26px; height: 26px; }
+.album-card:hover .album-play { transform: translate(-50%, -50%) scale(1.1); }
+
+/* Tombol putar besar di lightbox */
+.lb-play {
+  position: absolute; z-index: 1; top: 50%; left: 50%; width: 84px; height: 84px;
+  transform: translate(-50%, -50%); border: 0; transition: transform .2s ease;
+}
+.lb-play svg { width: 38px; height: 38px; }
+.lb-play:hover { transform: translate(-50%, -50%) scale(1.08); }
+
+/* Pemutar YouTube mengisi panggung; tombol navigasi tetap di atasnya */
+.lb-video { position: absolute; inset: 0; background: #000; }
+.lb-video iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+/* Sampul video: isi penuh supaya tidak ada bingkai hitam di kiri-kanan */
+.lb-stage.is-video .lb-img { object-fit: cover; }
+
+/* Ikon kecil di thumbnail video */
+.lb-thumb { position: relative; }
+.lb-thumb-play {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: rgba(3, 44, 76, .35); color: var(--white);
+}
+.lb-thumb-play svg { width: 20px; height: 20px; fill: currentColor; }
+
+@media (max-width: 640px) {
+  .album-play { width: 48px; height: 48px; }
+  .lb-play { width: 68px; height: 68px; }
+}

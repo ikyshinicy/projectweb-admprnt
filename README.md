@@ -47,12 +47,32 @@ langsung karena akan tertimpa. Gambar kartu kategori:
 
 ## Galeri
 
-Satu album = satu kartu. Klik kartu membuka tampilan besar berisi semua foto album itu
-(geser / panah kiri-kanan). Semua diatur di `js/gallery-data.js`:
+Satu album = satu kartu. Klik kartu membuka tampilan besar berisi semua foto **dan video**
+album itu (geser / panah kiri-kanan). Semua diatur di `js/gallery-data.js`:
 
-- tambah album: salin satu blok `{ ... }`, ubah `id`, `title`, `category`, dan daftar `photos`
+- tambah album: salin satu blok `{ ... }`, ubah `id`, `title`, `category`, dan daftar `items`
 - `featured: true` = ikut tampil di beranda (disarankan 6 saja)
 - foto belum ada = otomatis tampil placeholder, tidak perlu ubah kode
+
+Halaman `/galeri/` punya tab **Percetakan | Reklame | Event Organizer** (plus chip kategori di
+dalamnya). Bidang diatur lewat `GALLERY_GROUPS`, dan tiap kategori di `GALLERY_CATEGORIES`
+punya `group`-nya. Album ikut bidang dari kategorinya. Tab bisa dibuka langsung lewat
+`galeri/#reklame` (tombol "Lihat Galeri" di halaman layanan sudah memakai ini).
+Event Organizer belum punya kategori/album: tambahkan kategori dengan `group: "event-organizer"`.
+
+Isi `items` (boleh dicampur dalam satu album):
+
+```js
+{ type: "photo", src: "assets/images/galeri/xxx/1.webp", alt: "Deskripsi foto" }
+{ type: "video", url: "https://youtu.be/XXXXXXXXXXX", title: "Judul video" }
+```
+
+- Video: cukup tempel link YouTube (watch, youtu.be, shorts, embed, live). Diputar langsung
+  di situs lewat youtube-nocookie; pemutar baru dimuat saat tombol putar diklik.
+- Thumbnail video otomatis dari YouTube; mau gambar sendiri: tambahkan `thumb: "..."`.
+- Mulai di detik tertentu: tambahkan `?t=90` pada link.
+- Link YouTube yang salah dilewati (dan dicatat di console), tidak merusak galeri.
+- Video harus berstatus Publik atau Tidak Publik (unlisted) dan mengizinkan embed.
 
 ## Daftar gambar yang dibutuhkan
 

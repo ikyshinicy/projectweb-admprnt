@@ -171,6 +171,7 @@ const generated = [];
       file,
       render(read("templates/layanan-kategori.html"), {
         root,
+        slug: c.slug,
         title: esc(c.title),
         lead: esc(c.lead),
         section_title: c.sectionTitle,
