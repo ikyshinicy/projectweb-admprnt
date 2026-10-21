@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Panel Admin | ADAM XII PRINTING</title>
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body>
+  <main class="shell">
+    <section id="login-view" class="login-wrap">
+      <div class="brand-mark">A12</div>
+      <p class="eyebrow">ADAM XII PRINTING</p>
+      <h1>Panel pengelola situs</h1>
+      <p class="muted">Masuk untuk mengatur konten situs. Kata sandi diperiksa dengan aman di server.</p>
+      <form id="login-form" class="panel login-card">
+        <label for="password">Kata sandi admin</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="1024">
+        <button class="button primary full" type="submit">Masuk ke panel</button>
+        <p id="login-message" class="message" role="status"></p>
+      </form>
+    </section>
+
+    <section id="app-view" hidden>
+      <header class="topbar">
+        <div class="brand"><div class="brand-mark small">A12</div><div><strong>ADAM XII PRINTING</strong><span>Panel pengelola situs</span></div></div>
+        <div class="top-actions"><span id="connection-state" class="pill">Memeriksa sesi…</span><button id="logout-button" class="button secondary">Keluar</button></div>
+      </header>
+      <div class="intro"><div><p class="eyebrow">RUANG ADMIN</p><h1>Kelola konten situs</h1><p class="muted">Perubahan disimpan sebagai satu penerbitan. Situs biasanya diperbarui dalam 1–2 menit setelah proses build selesai.</p></div><button id="reload-button" class="button secondary">Muat ulang data</button></div>
+      <div id="dirty-banner" class="dirty-banner" hidden><span class="dot"></span> Ada perubahan yang belum diterbitkan.</div>
+      <div id="global-message" class="message global-message" role="status"></div>
+      <nav class="tabs" aria-label="Bagian konten">
+        <button class="tab active" data-tab="layanan">Layanan</button><button class="tab" data-tab="blog">Blog & Video</button><button class="tab" data-tab="galeri">Galeri</button><button class="tab" data-tab="kontak">Kontak & Info</button>
+      </nav>
+      <section id="section-layanan" class="editor-section"></section>
+      <section id="section-blog" class="editor-section" hidden></section>
+      <section id="section-galeri" class="editor-section" hidden></section>
+      <section id="section-kontak" class="editor-section" hidden></section>
+      <footer class="publish-bar"><div><strong id="publish-status">Belum ada perubahan</strong><span id="publish-detail">Konten akan diperiksa sebelum dikirim ke GitHub.</span></div><button id="publish-button" class="button primary" disabled>Terbitkan perubahan</button></footer>
+    </section>
+  </main>
+  <script src="./admin.js" defer></script>
+</body>
+</html>
