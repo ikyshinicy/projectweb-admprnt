@@ -1,5 +1,5 @@
 {
-  "_catatan": "SEMUA isi halaman layanan. Edit di sini lalu jalankan: node scripts/build.js. Ikon: copy, idcard, banner, billboard, card, brochure, stamp, sticker, book, mug, letters, neon, signboard, bulb, car, build, clipboard, stage, sound, tent, mic, camera, food, users, heart, printer, calendar.",
+  "_catatan": "SEMUA isi halaman layanan. Edit di sini lalu jalankan: node scripts/build.js. Ikon: copy, idcard, banner, billboard, card, brochure, stamp, sticker, book, mug, letters, neon, signboard, bulb, car, build, clipboard, stage, sound, tent, mic, camera, food, users, heart, printer, calendar, cube.",
   "categories": [
     {
       "id": "percetakan",
@@ -59,6 +59,7 @@
       "ctaLead": "Ceritakan jenis acara, tanggal, dan perkiraan jumlah tamu lewat WhatsApp.",
       "items": [
         { "title": "Konsep & Perencanaan Acara", "icon": "clipboard", "desc": "Menyusun konsep, rundown, anggaran, dan pembagian tugas sampai hari acara." },
+        { "title": "Desain 3D Skala 1:1", "icon": "cube", "desc": "Visual 3D panggung, booth, dan tata ruang acara dengan skala 1:1, supaya hasilnya bisa dilihat sebelum dikerjakan." },
         { "title": "Dekorasi, Panggung & Backdrop", "icon": "stage", "desc": "Dekorasi ruangan, panggung, dan backdrop sesuai tema acara." },
         { "title": "Sound System & Lighting", "icon": "sound", "desc": "Perlengkapan suara dan pencahayaan untuk acara indoor maupun outdoor." },
         { "title": "Tenda, Kursi & Meja", "icon": "tent", "desc": "Sewa tenda, kursi, meja, dan perlengkapan acara lainnya." },
