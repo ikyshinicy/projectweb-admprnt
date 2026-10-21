@@ -14,13 +14,13 @@
   },
   "pages": [
     {
-      "_catatan": "Satu blok per halaman. file = lokasi HTML, path = alamat di situs. schema: business (beranda), collection (galeri, daftar layanan), atau service (satu kategori; isi field category).",
+      "_catatan": "Satu blok per halaman. file = lokasi HTML, path = alamat di situs. schema: business (beranda), about (tentang kami), collection (galeri, daftar layanan), atau service (satu kategori; isi field category).",
       "file": "index.html",
       "path": "/",
       "schema": "business",
       "priority": "1.0",
-      "title": "ADAM XII PRINTING — Percetakan & Reklame di Sorong",
-      "description": "Percetakan & reklame di Sorong: kartu nama, brosur, banner, stempel, stiker, huruf timbul, neonbox, dan souvenir. Hasil berkualitas, harga terjangkau.",
+      "title": "Percetakan, Reklame & Event Organizer Sorong | ADAM XII",
+      "description": "Percetakan, reklame & event organizer di Sorong: cetak banner, kartu nama, neonbox, huruf timbul, dekorasi, dan acara. Berkualitas, harga terjangkau.",
       "keywords": [
         "percetakan Sorong",
         "reklame Sorong",
@@ -29,7 +29,8 @@
         "stempel Sorong",
         "neonbox Sorong",
         "huruf timbul Sorong",
-        "cetak stiker Sorong"
+        "cetak stiker Sorong",
+        "event organizer Sorong"
       ],
       "nav": "beranda"
     },
@@ -38,8 +39,8 @@
       "path": "/galeri/",
       "schema": "gallery",
       "priority": "0.8",
-      "title": "Galeri Hasil Cetak & Reklame | ADAM XII PRINTING",
-      "description": "Lihat hasil kerja ADAM XII PRINTING Sorong: kartu nama, banner, stiker, neonbox, huruf timbul, stempel, dan souvenir custom.",
+      "title": "Galeri Cetak, Reklame & Event Organizer | ADAM XII PRINTING",
+      "description": "Lihat hasil kerja ADAM XII PRINTING Sorong: cetak, reklame, dan event organizer seperti pernikahan, seminar, dan gathering.",
       "keywords": [
         "galeri percetakan Sorong",
         "contoh hasil cetak Sorong",
@@ -56,6 +57,32 @@
         [
           "Galeri",
           "/galeri/"
+        ]
+      ]
+    },
+    {
+      "file": "tentang/index.html",
+      "path": "/tentang/",
+      "schema": "about",
+      "priority": "0.7",
+      "nav": "tentang",
+      "title": "Tentang Kami | ADAM XII PRINTING Sorong",
+      "description": "Kenali ADAM XII PRINTING, percetakan, reklame, dan event organizer di Sorong untuk personal, instansi, UMKM, dan perusahaan. Berkualitas, harga terjangkau.",
+      "keywords": [
+        "tentang ADAM XII PRINTING",
+        "percetakan Sorong",
+        "reklame Sorong",
+        "event organizer Sorong",
+        "alamat percetakan Sorong"
+      ],
+      "crumbs": [
+        [
+          "Beranda",
+          "/"
+        ],
+        [
+          "Tentang Kami",
+          "/tentang/"
         ]
       ]
     },
@@ -177,7 +204,7 @@
   ],
   "social": {
     "ogImage": "/assets/images/og/og-cover.jpg",
-    "ogImageAlt": "ADAM XII PRINTING — Percetakan & Reklame Sorong",
+    "ogImageAlt": "Percetakan, Reklame & Event Organizer Sorong | ADAM XII",
     "ogImageWidth": 1200,
     "ogImageHeight": 630,
     "twitterCard": "summary_large_image"
@@ -194,7 +221,7 @@
     "_catatan": "Dipakai untuk schema LocalBusiness. Kosongkan field yang belum ada — akan dilewati otomatis.",
     "type": "PrintShop",
     "name": "ADAM XII PRINTING",
-    "description": "Percetakan dan reklame di Sorong untuk kebutuhan personal, instansi, UMKM, dan perusahaan.",
+    "description": "Percetakan, reklame, dan event organizer di Sorong untuk kebutuhan personal, instansi, UMKM, dan perusahaan.",
     "telephone": "+6281293419534",
     "email": "",
     "priceRange": "",

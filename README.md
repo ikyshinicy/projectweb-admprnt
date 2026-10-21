@@ -1,17 +1,18 @@
 # ADAM XII PRINTING — Landing Page
 
-Landing page statis (HTML, CSS, JS biasa) untuk ADAM XII PRINTING — Percetakan & Reklame Sorong. Tanpa framework, bisa di-upload ke hosting apa pun.
+Landing page statis (HTML, CSS, JS biasa) untuk ADAM XII PRINTING — Percetakan, Reklame & Event Organizer Sorong. Tanpa framework, bisa di-upload ke hosting apa pun.
 
 ## Struktur
 
 ```
 index.html            beranda (3 kartu layanan + cuplikan galeri)
+tentang/index.html    halaman Tentang Kami (profil, bidang usaha, keunggulan, lokasi)
 galeri/index.html     halaman galeri lengkap (filter + album)
 layanan/              HASIL BUILD: /layanan/ + percetakan, reklame, event-organizer
 content/layanan.json  isi semua halaman layanan (daftar layanan per kategori)
 partials/             header & footer (ditulis sekali, dipasang ke semua halaman)
 templates/            kerangka halaman layanan
-css/                  base (warna), layout, components, sections, gallery, responsive
+css/                  base (warna), layout, components, sections, gallery, about, responsive
 js/config.js          nomor WhatsApp, alamat, jam buka, Instagram
 js/main.js            menu mobile, nav aktif, animasi, link WhatsApp
 js/gallery-data.js    SEMUA isi galeri (album, kategori, foto)
@@ -34,6 +35,12 @@ assets/images/        semua gambar, dikelompokkan per section
 | Title, description, kata kunci, domain | `seo/seo.config.json` lalu `node scripts/build.js` |
 | Tampilan HP | `css/responsive.css` |
 | Gambar | timpa file di `assets/images/` dengan nama yang sama |
+
+## Halaman Tentang Kami
+
+`tentang/index.html` ditulis langsung (bukan hasil build), edit teksnya di file itu. Alamat dan jam buka
+otomatis dari `js/config.js`. Gambar profil memakai `assets/images/hero/toko-hero.webp`; ganti `src`-nya kalau
+ada foto toko/tim yang asli. Header, footer, dan SEO tetap diisi lewat `node scripts/build.js`.
 
 ## Halaman layanan
 

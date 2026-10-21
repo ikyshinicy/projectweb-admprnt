@@ -126,13 +126,14 @@ function layoutVars(file, nav) {
     root,
     wa,
     href_beranda: root || "#beranda",
-    href_tentang: root + "#tentang",
+    href_tentang: root + "tentang/",
     href_layanan: root + "layanan/",
     href_galeri: root + "galeri/",
     href_proses: root + "#proses",
     act_beranda: act("beranda"),
     act_layanan: act("layanan"),
     act_galeri: act("galeri"),
+    act_tentang: act("tentang"),
     foot_services: cats.map((c) => `<a href="${root}layanan/${c.slug}/">${esc(c.title)}</a>`).join("\n      ")
   };
 }
