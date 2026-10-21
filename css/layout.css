@@ -73,3 +73,6 @@ section { padding: 76px 0; }
 .foot-links { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; font-weight: 600; margin-top: 10px; }
 .foot-links:empty, .foot-links:not(:has(:not([hidden]))) { display: none; }
 .foot-links a:hover { color: var(--white); }
+.foot-nav { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; }
+.foot-nav b { color: var(--white); font-size: 14px; margin-bottom: 2px; }
+.foot-nav a:hover { color: var(--white); }

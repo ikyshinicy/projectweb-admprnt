@@ -29,7 +29,7 @@
 <meta name="twitter:description" content="Lihat hasil kerja ADAM XII PRINTING Sorong: kartu nama, banner, stiker, neonbox, huruf timbul, stempel, dan souvenir custom.">
 <meta name="twitter:image" content="https://example.com/assets/images/og/og-cover.jpg">
 
-<!-- Schema.org: halaman galeri -->
+<!-- Schema.org: halaman layanan/galeri -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -83,6 +83,7 @@
 </head>
 <body>
 
+<!-- PARTIAL:header -->
 <!-- ================= HEADER ================= -->
 <header class="site-header">
   <div class="container nav">
@@ -97,9 +98,9 @@
     <nav class="nav-links" aria-label="Navigasi utama">
       <a href="../">Beranda</a>
       <a href="../#tentang">Tentang Kami</a>
-      <a href="../#layanan">Layanan</a>
-      <a class="active" href="./" aria-current="page">Galeri</a>
-      <a href="../#kontak">Kontak</a>
+      <a href="../layanan/">Layanan</a>
+      <a class="active" aria-current="page" href="../galeri/">Galeri</a>
+      <a href="#kontak">Kontak</a>
       <a class="btn btn-primary btn-sm" data-wa href="https://wa.me/6281293419534">Pesan Sekarang</a>
     </nav>
 
@@ -118,12 +119,13 @@
   </div>
   <a href="../">Beranda</a>
   <a href="../#tentang">Tentang Kami</a>
-  <a href="../#layanan">Layanan</a>
+  <a href="../layanan/">Layanan</a>
   <a href="../#proses">Alur Pemesanan</a>
-  <a class="active" href="./" aria-current="page">Galeri</a>
-  <a href="../#kontak">Kontak</a>
+  <a class="active" aria-current="page" href="../galeri/">Galeri</a>
+  <a href="#kontak">Kontak</a>
   <a class="btn btn-primary" data-wa href="https://wa.me/6281293419534">Pesan Sekarang</a>
 </aside>
+<!-- /PARTIAL:header -->
 
 <main>
 
@@ -164,6 +166,7 @@
 
 </main>
 
+<!-- PARTIAL:footer -->
 <!-- ================= FOOTER ================= -->
 <footer class="site-footer">
   <div class="container foot">
@@ -173,13 +176,20 @@
       <div class="foot-links">
         <span data-config="address"><span data-label></span></span>
         <span data-config="openingHours"><span data-label></span></span>
-        <a data-config="instagram" href="../#kontak">Instagram</a>
-        <a data-config="email" href="../#kontak"><span data-label></span></a>
+        <a data-config="instagram" href="#kontak">Instagram</a>
+        <a data-config="email" href="#kontak"><span data-label></span></a>
       </div>
     </div>
+    <nav class="foot-nav" aria-label="Layanan">
+      <b>Layanan</b>
+      <a href="../layanan/percetakan/">Percetakan</a>
+      <a href="../layanan/reklame/">Reklame</a>
+      <a href="../layanan/event-organizer/">Event Organizer</a>
+    </nav>
     <small>© 2026 ADAM XII PRINTING. All rights reserved.</small>
   </div>
 </footer>
+<!-- /PARTIAL:footer -->
 
 <script src="../js/config.js"></script>
 <script src="../js/gallery-data.js"></script>

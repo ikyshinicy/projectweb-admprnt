@@ -8,7 +8,7 @@
      - robots.txt, sitemap.xml, site.webmanifest
      - seo/schema-local-business.json (salinan, untuk referensi)
 
-   Jalankan:  node scripts/build-seo.js
+   Jalankan:  node scripts/build.js   (atau hanya SEO: node scripts/build-seo.js)
    Tanpa dependensi. Hanya butuh Node.js 14+.
 
    Catatan GitHub Pages: kalau alamat situs berupa
@@ -81,9 +81,19 @@ const businessSchema = prune({
   areaServed: { "@type": "City", name: business.address.addressLocality }
 });
 
-function gallerySchema(p) {
+const content = JSON.parse(read("content/layanan.json"));
+const ctx = "https://schema.org";
+const crumbList = (p) => ({
+  "@type": "BreadcrumbList",
+  itemListElement: (p.crumbs || [["Beranda", "/"], [p.title, p.path]]).map((c, i) => ({
+    "@type": "ListItem", position: i + 1, name: c[0], item: site.url + c[1]
+  }))
+});
+
+// Halaman kumpulan (galeri, daftar layanan)
+function collectionSchema(p) {
   return {
-    "@context": "https://schema.org",
+    "@context": ctx,
     "@graph": [
       {
         "@type": "CollectionPage",
@@ -92,13 +102,36 @@ function gallerySchema(p) {
         url: site.url + p.path,
         isPartOf: { "@type": "WebSite", name: site.name, url: site.url + "/" }
       },
+      crumbList(p)
+    ]
+  };
+}
+
+// Halaman satu kategori layanan: daftar isinya jadi katalog penawaran
+function serviceSchema(p) {
+  const c = content.categories.find((x) => x.id === p.category);
+  if (!c) { warnings.push(`[${p.path}] kategori "${p.category}" tidak ada di content/layanan.json.`); return collectionSchema(p); }
+  return {
+    "@context": ctx,
+    "@graph": [
       {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Beranda", item: site.url + "/" },
-          { "@type": "ListItem", position: 2, name: "Galeri", item: site.url + p.path }
-        ]
-      }
+        "@type": "Service",
+        name: "Layanan " + c.title,
+        serviceType: c.title,
+        description: p.description,
+        url: site.url + p.path,
+        provider: { "@type": business.type || "LocalBusiness", name: business.name, url: site.url + "/" },
+        areaServed: { "@type": "City", name: business.address.addressLocality },
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Layanan " + c.title,
+          itemListElement: c.items.map((i) => ({
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: i.title, description: i.desc }
+          }))
+        }
+      },
+      crumbList(p)
     ]
   };
 }
@@ -135,8 +168,8 @@ function headBlock(p) {
   L.push(`<meta name="twitter:description" content="${esc(p.description)}">`);
   L.push(`<meta name="twitter:image" content="${esc(abs(social.ogImage))}">`);
   L.push("");
-  const schema = p.schema === "gallery" ? gallerySchema(p) : businessSchema;
-  L.push(p.schema === "gallery" ? "<!-- Schema.org: halaman galeri -->" : "<!-- Schema.org: bisnis lokal -->");
+  const schema = p.schema === "service" ? serviceSchema(p) : p.schema === "business" ? businessSchema : collectionSchema(p);
+  L.push(p.schema === "business" ? "<!-- Schema.org: bisnis lokal -->" : "<!-- Schema.org: halaman layanan/galeri -->");
   L.push(`<script type="application/ld+json">`);
   L.push(JSON.stringify(schema, null, 2));
   L.push(`</script>`);

@@ -5,14 +5,20 @@ Landing page statis (HTML, CSS, JS biasa) untuk ADAM XII PRINTING — Percetakan
 ## Struktur
 
 ```
-index.html            beranda (cuplikan galeri: 6 album unggulan)
+index.html            beranda (3 kartu layanan + cuplikan galeri)
 galeri/index.html     halaman galeri lengkap (filter + album)
+layanan/              HASIL BUILD: /layanan/ + percetakan, reklame, event-organizer
+content/layanan.json  isi semua halaman layanan (daftar layanan per kategori)
+partials/             header & footer (ditulis sekali, dipasang ke semua halaman)
+templates/            kerangka halaman layanan
 css/                  base (warna), layout, components, sections, gallery, responsive
 js/config.js          nomor WhatsApp, alamat, jam buka, Instagram
 js/main.js            menu mobile, nav aktif, animasi, link WhatsApp
 js/gallery-data.js    SEMUA isi galeri (album, kategori, foto)
 js/gallery.js         kartu album + tampilan besar (geser foto)
 seo/seo.config.json   SATU file kontrol SEO
+scripts/build.js      jalankan SEMUA build (partials + SEO)
+scripts/build-partials.js  buat halaman layanan, pasang header/footer
 scripts/build-seo.js  isi <head>, robots.txt, sitemap.xml, webmanifest
 assets/images/        semua gambar, dikelompokkan per section
 ```
@@ -23,9 +29,21 @@ assets/images/        semua gambar, dikelompokkan per section
 |---|---|
 | Nomor WhatsApp, alamat, jam buka | `js/config.js` |
 | Warna | `css/base.css` (hanya di sini) |
-| Title, description, kata kunci, domain | `seo/seo.config.json` lalu `node scripts/build-seo.js` |
+| Daftar layanan (tambah/ubah/hapus) | `content/layanan.json` lalu `node scripts/build.js` |
+| Menu atas / footer | `partials/header.html`, `partials/footer.html` lalu `node scripts/build.js` |
+| Title, description, kata kunci, domain | `seo/seo.config.json` lalu `node scripts/build.js` |
 | Tampilan HP | `css/responsive.css` |
 | Gambar | timpa file di `assets/images/` dengan nama yang sama |
+
+## Halaman layanan
+
+Ada 3 kategori: Percetakan, Reklame, Event Organizer. Semua isinya ada di
+`content/layanan.json` (judul, deskripsi, dan daftar layanan tiap kategori).
+Setelah mengedit, jalankan `node scripts/build.js`. Jangan edit file di `layanan/`
+langsung karena akan tertimpa. Gambar kartu kategori:
+`assets/images/layanan/event-organizer.webp` (belum ada; sementara tampil ikon).
+
+**Setiap kali mengubah menu/footer/daftar layanan, jalankan `node scripts/build.js`.**
 
 ## Galeri
 
@@ -50,6 +68,7 @@ assets/images/layanan/stiker.webp
 assets/images/layanan/huruf-timbul.webp
 assets/images/layanan/neonbox.webp
 assets/images/layanan/souvenir.webp
+assets/images/layanan/event-organizer.webp
 assets/images/tentang/tentang-toko.png
 assets/images/galeri/<id-album>/1.webp, 2.webp, ...   (lihat js/gallery-data.js)
 assets/images/og/og-cover.jpg            1200x630 (preview link)
@@ -69,10 +88,10 @@ python3 -m http.server 8080
 ## SEO
 
 ```bash
-node scripts/build-seo.js
+node scripts/build.js
 ```
 
-Perintah ini menulis ulang blok `<head>` di `index.html` (antara penanda `SEO:START` dan `SEO:END`), `robots.txt`, `sitemap.xml`, dan `site.webmanifest`.
+Perintah ini (bagian SEO-nya) menulis ulang blok `<head>` di `index.html` (antara penanda `SEO:START` dan `SEO:END`), `robots.txt`, `sitemap.xml`, dan `site.webmanifest`.
 
 **Penting:** `indexing.allow` di `seo.config.json` bawaannya `false` (situs dikunci dari Google). Ubah ke `true` dan build ulang saat situs resmi online. Lihat `seo/CHECKLIST.md`.
 

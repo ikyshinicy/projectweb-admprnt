@@ -1,6 +1,5 @@
 {
   "_catatan": "SATU file kontrol SEO. Edit di sini lalu jalankan: node scripts/build-seo.js",
-
   "site": {
     "url": "https://example.com",
     "_url_catatan": "TODO: ganti dengan domain asli, tanpa garis miring di akhir",
@@ -9,15 +8,13 @@
     "locale": "id_ID",
     "themeColor": "#087FA8"
   },
-
   "indexing": {
     "allow": false,
     "_catatan": "false = situs dikunci dari Google (noindex) selama masih pengembangan. Ubah ke true saat resmi online."
   },
-
   "pages": [
     {
-      "_catatan": "Satu blok per halaman. file = lokasi HTML, path = alamat di situs. schema: business (beranda) atau gallery.",
+      "_catatan": "Satu blok per halaman. file = lokasi HTML, path = alamat di situs. schema: business (beranda), collection (galeri, daftar layanan), atau service (satu kategori; isi field category).",
       "file": "index.html",
       "path": "/",
       "schema": "business",
@@ -33,7 +30,8 @@
         "neonbox Sorong",
         "huruf timbul Sorong",
         "cetak stiker Sorong"
-      ]
+      ],
+      "nav": "beranda"
     },
     {
       "file": "galeri/index.html",
@@ -48,10 +46,135 @@
         "contoh neonbox Sorong",
         "contoh huruf timbul Sorong",
         "hasil cetak banner Sorong"
+      ],
+      "nav": "galeri",
+      "crumbs": [
+        [
+          "Beranda",
+          "/"
+        ],
+        [
+          "Galeri",
+          "/galeri/"
+        ]
       ]
+    },
+    {
+      "file": "layanan/index.html",
+      "path": "/layanan/",
+      "nav": "layanan",
+      "schema": "collection",
+      "priority": "0.9",
+      "title": "Layanan Percetakan, Reklame & Event Organizer Sorong",
+      "description": "ADAM XII PRINTING Sorong melayani percetakan, reklame (huruf timbul, neonbox, papan nama), dan event organizer untuk instansi, UMKM, dan perusahaan.",
+      "keywords": [
+        "layanan percetakan Sorong",
+        "jasa reklame Sorong",
+        "event organizer Sorong"
+      ],
+      "crumbs": [
+        [
+          "Beranda",
+          "/"
+        ],
+        [
+          "Layanan",
+          "/layanan/"
+        ]
+      ]
+    },
+    {
+      "file": "layanan/percetakan/index.html",
+      "path": "/layanan/percetakan/",
+      "nav": "layanan",
+      "schema": "service",
+      "priority": "0.8",
+      "title": "Percetakan Sorong: Fotocopy, ID Card, Spanduk, Baliho",
+      "description": "Percetakan di Sorong: fotocopy, ID card, spanduk, baliho, kartu nama, brosur, stempel, dan stiker. Cepat, rapi, harga terjangkau.",
+      "keywords": [
+        "percetakan Sorong",
+        "fotocopy Sorong",
+        "cetak ID card Sorong",
+        "cetak spanduk Sorong",
+        "cetak baliho Sorong"
+      ],
+      "crumbs": [
+        [
+          "Beranda",
+          "/"
+        ],
+        [
+          "Layanan",
+          "/layanan/"
+        ],
+        [
+          "Percetakan",
+          "/layanan/percetakan/"
+        ]
+      ],
+      "category": "percetakan"
+    },
+    {
+      "file": "layanan/reklame/index.html",
+      "path": "/layanan/reklame/",
+      "nav": "layanan",
+      "schema": "service",
+      "priority": "0.8",
+      "title": "Jasa Reklame Sorong: Huruf Timbul, Neonbox, Papan Nama",
+      "description": "Jasa reklame di Sorong: pembuatan dan pemasangan huruf timbul, neonbox, papan nama kantor, dan papan reklame. Survei dan pemasangan oleh tim kami.",
+      "keywords": [
+        "jasa reklame Sorong",
+        "huruf timbul Sorong",
+        "neonbox Sorong",
+        "papan nama kantor Sorong"
+      ],
+      "crumbs": [
+        [
+          "Beranda",
+          "/"
+        ],
+        [
+          "Layanan",
+          "/layanan/"
+        ],
+        [
+          "Reklame",
+          "/layanan/reklame/"
+        ]
+      ],
+      "category": "reklame"
+    },
+    {
+      "file": "layanan/event-organizer/index.html",
+      "path": "/layanan/event-organizer/",
+      "nav": "layanan",
+      "schema": "service",
+      "priority": "0.8",
+      "title": "Event Organizer Sorong | ADAM XII PRINTING",
+      "description": "Event organizer di Sorong: perencanaan acara, dekorasi, panggung, sound system, tenda, dokumentasi, dan acara instansi, perusahaan, maupun keluarga.",
+      "keywords": [
+        "event organizer Sorong",
+        "EO Sorong",
+        "dekorasi panggung Sorong",
+        "sewa tenda Sorong"
+      ],
+      "crumbs": [
+        [
+          "Beranda",
+          "/"
+        ],
+        [
+          "Layanan",
+          "/layanan/"
+        ],
+        [
+          "Event Organizer",
+          "/layanan/event-organizer/"
+        ]
+      ],
+      "category": "event-organizer"
     }
   ],
-
   "social": {
     "ogImage": "/assets/images/og/og-cover.jpg",
     "ogImageAlt": "ADAM XII PRINTING — Percetakan & Reklame Sorong",
@@ -59,17 +182,14 @@
     "ogImageHeight": 630,
     "twitterCard": "summary_large_image"
   },
-
   "verification": {
     "googleSearchConsole": "",
     "_catatan": "Isi kode dari tag 'google-site-verification' (hanya isi content-nya)."
   },
-
   "analytics": {
     "googleAnalyticsId": "",
     "_catatan": "Contoh: G-XXXXXXXXXX. Kosongkan kalau tidak dipakai."
   },
-
   "business": {
     "_catatan": "Dipakai untuk schema LocalBusiness. Kosongkan field yang belum ada — akan dilewati otomatis.",
     "type": "PrintShop",
@@ -87,7 +207,10 @@
       "postalCode": "",
       "addressCountry": "ID"
     },
-    "geo": { "latitude": null, "longitude": null },
+    "geo": {
+      "latitude": null,
+      "longitude": null
+    },
     "openingHours": [],
     "_openingHours_contoh": "[\"Mo-Sa 08:00-17:00\"]",
     "sameAs": []
