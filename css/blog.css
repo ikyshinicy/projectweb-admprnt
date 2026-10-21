@@ -45,6 +45,15 @@
 .video-play:hover { transform: translate(-50%, -50%) scale(1.08); }
 .video-media.is-playing { background: #000; }
 
+/* Video portrait (Instagram / TikTok / Shorts): rasio 9:16, grid 4 kolom sendiri */
+.blog-grid[hidden] { display: none; }
+.blog-grid--portrait { grid-template-columns: repeat(4, 1fr); }
+.blog-grid:not([hidden]) + .blog-grid--portrait { margin-top: 22px; }
+.video-media--portrait { aspect-ratio: 9 / 16; }
+.video-media--portrait iframe { background: #fff; }
+/* Embed Instagram membawa bilah atas & bawah, jadi saat diputar butuh sedikit lebih tinggi */
+.video-media--portrait.is-ig.is-playing { aspect-ratio: 9 / 18; }
+
 /* Placeholder "Segera hadir" */
 .post-soon {
   position: absolute; left: 10px; top: 10px; padding: 4px 11px; border-radius: var(--radius-pill);
@@ -56,12 +65,14 @@
 
 @media (max-width: 980px) {
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
+  .blog-grid--portrait { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 600px) {
   .blog-toolbar { padding-top: 24px; }
   .blog-video { padding-top: 32px; }
   .video-play { width: 54px; height: 54px; }
   .blog-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+  .blog-grid--portrait { grid-template-columns: 1fr; max-width: 340px; }
   .blog-filters { flex-wrap: nowrap; overflow-x: auto; margin-inline: -4%; padding: 0 4% 8px; scrollbar-width: none; }
   .blog-filters::-webkit-scrollbar { display: none; }
   .blog-filters .chip { flex: none; }

@@ -17,8 +17,19 @@
                Mulai di detik tertentu: tambahkan ?t=90 di link.
      desc      (opsional) keterangan singkat
      thumb     (opsional) gambar sampul sendiri, mis. "assets/images/blog/video-1.webp";
-               kalau kosong, sampul diambil otomatis dari YouTube
+               kalau kosong, sampul diambil otomatis dari YouTube (khusus YouTube)
      Video diputar langsung di halaman ini (tidak pindah ke YouTube).
+
+     Instagram & TikTok juga bisa, tampil PORTRAIT (9:16) di baris sendiri di bawah video YouTube:
+       Instagram  tempel link reel/post: instagram.com/reel/XXXX/ atau instagram.com/p/XXXX/
+                  (akun harus publik; link profil @akun tidak bisa)
+       TikTok     tempel link LENGKAP: tiktok.com/@akun/video/1234567890123456789
+                  (link pendek vm.tiktok.com / vt.tiktok.com TIDAK bisa; buka dulu, lalu salin link lengkapnya)
+       YouTube Shorts (youtube.com/shorts/...) otomatis ikut portrait.
+     Instagram & TikTok tidak punya sampul otomatis: isi `thumb` sendiri
+     (mis. "assets/images/blog/reel-1.webp"), kalau kosong tampil ikon placeholder.
+     Catatan: setelah klik putar, pemutar Instagram/TikTok bisa minta klik putar sekali lagi.
+     format    (opsional) paksa "portrait" atau "landscape", mis. untuk placeholder yang belum ada link.
 
    ---------- ARTIKEL dari web ----------
      title     judul artikel
@@ -47,6 +58,8 @@ window.BLOG_VIDEOS = [
 
   /* Contoh isian jadi:
   { title: "Proses Pemasangan Neonbox", category: "reklame", url: "https://youtu.be/XXXXXXXXXXX", desc: "Tahap demi tahap pemasangan neonbox toko." },
+  { title: "Reel Hasil Cetak Stiker", category: "tips-cetak", url: "https://www.instagram.com/reel/XXXXXXXXXXX/", thumb: "assets/images/blog/reel-1.webp", desc: "Reel singkat hasil cetak stiker." },
+  { title: "TikTok Pemasangan Banner", category: "reklame", url: "https://www.tiktok.com/@akun/video/1234567890123456789", thumb: "assets/images/blog/tiktok-1.webp", desc: "Proses pemasangan banner." },
   */
 ];
 

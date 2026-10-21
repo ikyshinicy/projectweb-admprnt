@@ -1,5 +1,6 @@
 /* ==========================================================
-   blog.js — halaman Blog: video YouTube (atas) + artikel web (bawah)
+   blog.js — halaman Blog: video (atas) + artikel web (bawah)
+   Video: YouTube (landscape), Instagram & TikTok (portrait).
    Data dari js/blog-data.js. Tombol filter kategori berlaku untuk keduanya.
    Bisa dibuka langsung lewat  blog/#reklame  (id = id kategori).
    ========================================================== */
@@ -23,6 +24,8 @@
     return n;
   }
   function isAbs(u) { return /^(https?:)?\/\//i.test(u) || /^data:/i.test(u); }
+  // Halaman ini ada di /blog/, jadi path file lokal (assets/...) harus naik satu folder
+  function asset(u) { return (isAbs(u) || u.charAt(0) === "/") ? u : "../" + u; }
   function catLabel(id) {
     for (var i = 0; i < CATS.length; i++) if (CATS[i].id === id) return CATS[i].label;
     return "";
@@ -48,15 +51,57 @@
     var u;
     try { u = new URL(s); } catch (e) { return null; }
     var h = u.hostname.replace(/^www\.|^m\./, "");
-    var id = "";
+    var id = "", short = false;
     if (h === "youtu.be") id = u.pathname.split("/")[1] || "";
     else if (h === "youtube.com" || h === "youtube-nocookie.com" || h === "music.youtube.com") {
       var parts = u.pathname.split("/").filter(Boolean);
       if (parts[0] === "watch") id = u.searchParams.get("v") || "";
-      else if (/^(shorts|embed|live|v)$/.test(parts[0])) id = parts[1] || "";
+      else if (/^(shorts|embed|live|v)$/.test(parts[0])) { id = parts[1] || ""; short = parts[0] === "shorts"; }
     }
     if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return null;
-    return { id: id, start: parseTime(u.searchParams.get("t") || u.searchParams.get("start")) };
+    return { kind: "youtube", label: "YouTube", id: id, portrait: short,
+             start: parseTime(u.searchParams.get("t") || u.searchParams.get("start")) };
+  }
+
+  /* ---------- Instagram (reel / post / tv) ---------- */
+  function parseInstagram(input) {
+    var s = String(input || "").trim();
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+    var u;
+    try { u = new URL(s); } catch (e) { return null; }
+    var h = u.hostname.replace(/^www\.|^m\./, "");
+    if (h !== "instagram.com" && h !== "instagr.am") return null;
+    var parts = u.pathname.split("/").filter(Boolean);
+    for (var i = 0; i < parts.length - 1; i++) {
+      if (/^(reel|reels|p|tv)$/.test(parts[i])) {
+        var code = parts[i + 1];
+        if (!/^[A-Za-z0-9_-]{5,}$/.test(code)) return null;
+        var path = /^(reel|reels|tv)$/.test(parts[i]) ? "reel" : "p";
+        return { kind: "instagram", label: "Instagram", id: code, path: path, portrait: true };
+      }
+    }
+    return null;   // mis. link profil (instagram.com/akun) tidak bisa di-embed
+  }
+
+  /* ---------- TikTok ---------- */
+  function parseTikTok(input) {
+    var s = String(input || "").trim();
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+    var u;
+    try { u = new URL(s); } catch (e) { return null; }
+    var h = u.hostname.replace(/^www\.|^m\./, "");
+    if (h !== "tiktok.com") return null;   // vm.tiktok.com / vt.tiktok.com (link pendek) tidak didukung
+    var m = /\/(?:video|v1|v2)\/(\d{8,25})/.exec(u.pathname);
+    return m ? { kind: "tiktok", label: "TikTok", id: m[1], portrait: true } : null;
+  }
+
+  /* Deteksi platform dari link */
+  function parseVideo(input) {
+    var s = String(input || "").trim();
+    if (!s) return null;
+    if (/instagram\.com|instagr\.am/i.test(s)) return parseInstagram(s);
+    if (/tiktok\.com/i.test(s)) return parseTikTok(s);
+    return parseYouTube(s);
   }
 
   /* ---------- Gambar dengan cadangan ---------- */
@@ -88,14 +133,16 @@
       media.appendChild(el("span", "post-soon", "Segera hadir"));
       return;
     }
-    var thumbs = v.thumb
-      ? [isAbs(v.thumb) ? v.thumb : v.thumb]
-      : ["https://i.ytimg.com/vi/" + yt.id + "/maxresdefault.jpg", "https://i.ytimg.com/vi/" + yt.id + "/hqdefault.jpg"];
-    loadImg(img, thumbs);
-    // YouTube membalas gambar kecil abu-abu (bukan 404) kalau maxres tidak ada
-    img.onload = function () {
-      if (!v.thumb && img.naturalWidth && img.naturalWidth <= 120 && thumbs.length > 1 && img.src.indexOf("maxres") > -1) img.src = thumbs[1];
-    };
+    var thumbs = [];
+    if (v.thumb) thumbs = [asset(v.thumb)];
+    else if (yt.kind === "youtube") thumbs = ["https://i.ytimg.com/vi/" + yt.id + "/maxresdefault.jpg", "https://i.ytimg.com/vi/" + yt.id + "/hqdefault.jpg"];
+    if (thumbs.length) {
+      loadImg(img, thumbs);
+      // YouTube membalas gambar kecil abu-abu (bukan 404) kalau maxres tidak ada
+      img.onload = function () {
+        if (!v.thumb && img.naturalWidth && img.naturalWidth <= 120 && thumbs.length > 1 && img.src.indexOf("maxres") > -1) img.src = thumbs[1];
+      };
+    } else img.classList.add("is-broken");   // Instagram/TikTok tanpa thumb: ikon placeholder
 
     var btn = el("button", "video-play");
     btn.type = "button";
@@ -110,10 +157,20 @@
     media.textContent = "";
     media.classList.add("is-playing");
     var f = document.createElement("iframe");
-    f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(yt.id) +
-      "?autoplay=1&rel=0&playsinline=1&modestbranding=1" + (yt.start ? "&start=" + yt.start : "");
+    if (yt.kind === "instagram") {
+      f.src = "https://www.instagram.com/" + yt.path + "/" + encodeURIComponent(yt.id) + "/embed/";
+      f.setAttribute("scrolling", "no");
+      f.allow = "encrypted-media; fullscreen; clipboard-write";
+    } else if (yt.kind === "tiktok") {
+      f.src = "https://www.tiktok.com/embed/v2/" + encodeURIComponent(yt.id);
+      f.setAttribute("scrolling", "no");
+      f.allow = "autoplay; encrypted-media; fullscreen";
+    } else {
+      f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(yt.id) +
+        "?autoplay=1&rel=0&playsinline=1&modestbranding=1" + (yt.start ? "&start=" + yt.start : "");
+      f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    }
     f.title = v.title;
-    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     f.allowFullscreen = true;
     f.referrerPolicy = "strict-origin-when-cross-origin";
     media.appendChild(f);
@@ -121,23 +178,34 @@
     playing = { media: media, build: function () { buildVideoMedia(media, v, yt); } };
   }
 
+  function isPortrait(v, vid) {
+    if (v.format) return v.format === "portrait";     // pilihan manual: "portrait" / "landscape"
+    return vid ? !!vid.portrait : false;
+  }
+
   function videoCard(v) {
-    var yt = parseYouTube(v.url);
-    if (v.url && !yt && window.console) console.warn("[blog] Link YouTube tidak valid:", v.url, "di video", v.title);
-    var card = el("article", "card post video-card");
-    var media = el("div", "post-media video-media img-slot");
-    buildVideoMedia(media, v, yt);
+    var vid = parseVideo(v.url);
+    if (v.url && !vid && window.console) {
+      console.warn("[blog] Link video tidak valid / tidak didukung:", v.url, "di video", v.title,
+        "(didukung: YouTube, Instagram reel/post, TikTok link lengkap .../video/angka)");
+    }
+    var portrait = isPortrait(v, vid);
+    var card = el("article", "card post video-card" + (portrait ? " video-card--portrait" : ""));
+    var media = el("div", "post-media video-media img-slot" +
+      (portrait ? " video-media--portrait" : "") + (vid && vid.kind === "instagram" ? " is-ig" : ""));
+    buildVideoMedia(media, v, vid);
     card.appendChild(media);
 
     var body = el("div", "post-body");
     var meta = el("div", "post-meta");
     if (catLabel(v.category)) meta.appendChild(el("span", "post-cat", catLabel(v.category)));
+    if (vid && vid.kind !== "youtube") meta.appendChild(el("span", "", vid.label));
     if (v.date) meta.appendChild(el("span", "", v.date));
     body.appendChild(meta);
     body.appendChild(el("h3", "", v.title));
     if (v.desc) body.appendChild(el("p", "", v.desc));
     card.appendChild(body);
-    return card;
+    return { card: card, portrait: portrait };
   }
 
   /* ---------- Kartu artikel ---------- */
@@ -155,7 +223,7 @@
     img.width = 800; img.height = 500; img.loading = "lazy"; img.decoding = "async"; img.alt = "";
     media.appendChild(img);
     media.insertAdjacentHTML("beforeend", IMG);
-    if (a.image) loadImg(img, [a.image]); else img.classList.add("is-broken");
+    if (a.image) loadImg(img, [asset(a.image)]); else img.classList.add("is-broken");
     if (!live) media.appendChild(el("span", "post-soon", "Segera hadir"));
     card.appendChild(media);
 
@@ -194,9 +262,35 @@
     items.forEach(function (x) { grid.appendChild(build(x)); });
   }
 
+  // Video landscape (YouTube) di grid utama; video portrait (IG/TikTok/Shorts) di grid sendiri di bawahnya
+  var pGrid = null;
+  if (vGrid) {
+    pGrid = el("div", "blog-grid blog-grid--portrait");
+    pGrid.hidden = true;
+    vGrid.parentNode.insertBefore(pGrid, vGrid.nextSibling);
+  }
+
+  function renderVideos() {
+    if (!vGrid) return;
+    vGrid.textContent = ""; pGrid.textContent = "";
+    var items = VIDEOS.filter(function (x) { return state === "all" || x.category === state; });
+    var land = [], port = [];
+    items.forEach(function (x) { var c = videoCard(x); (c.portrait ? port : land).push(c.card); });
+
+    if (!items.length) {
+      vGrid.hidden = false; pGrid.hidden = true;
+      vGrid.appendChild(el("p", "blog-empty", state === "all" ? "Video segera hadir." : "Belum ada video di kategori ini."));
+      return;
+    }
+    land.forEach(function (c) { vGrid.appendChild(c); });
+    port.forEach(function (c) { pGrid.appendChild(c); });
+    vGrid.hidden = !land.length;
+    pGrid.hidden = !port.length;
+  }
+
   function render() {
     playing = null;
-    fill(vGrid, VIDEOS, videoCard, state === "all" ? "Video segera hadir." : "Belum ada video di kategori ini.");
+    renderVideos();
     fill(aGrid, ARTICLES, articleCard, state === "all" ? "Artikel segera hadir." : "Belum ada artikel di kategori ini.");
     if (bar) bar.querySelectorAll("[data-filter]").forEach(function (c) {
       c.setAttribute("aria-pressed", c.getAttribute("data-filter") === state ? "true" : "false");
