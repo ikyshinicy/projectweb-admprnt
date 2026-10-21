@@ -64,8 +64,8 @@ window.BLOG_VIDEOS = [
 ];
 
 window.BLOG_ARTICLES = [
-  { title: "Festival Pesona Raja Ampat 2026", category: "Festival",      source: "Nama Situs", url: "https://sorongraya.inews.id/read/723702/festival-pesona-raja-ampat-2026-buka-peluang-petumbuhan-umkm-lokal", date: "", image: "", excerpt: "Ringkasan artikel tampil di sini, cukup satu sampai dua kalimat dengan kalimat sendiri." },
-  { title: "Judul Artikel 2", category: "reklame",         source: "Nama Situs", url: "", date: "", image: "", excerpt: "Ringkasan artikel tampil di sini, cukup satu sampai dua kalimat dengan kalimat sendiri." },
+  { title: "Festival Pesona Raja Ampat 2026", category: "Festival",      source: "sorongraya.inews.id", url: "https://sorongraya.inews.id/read/723702/festival-pesona-raja-ampat-2026-buka-peluang-petumbuhan-umkm-lokal", date: "", image: "", excerpt: "Ringkasan artikel tampil di sini, cukup satu sampai dua kalimat dengan kalimat sendiri." },
+  { title: "AVC Raja Ampat 2026", category: "reklame",         source: "rri.co.id", url: "https://rri.co.id/sorong/regional/2307344/avc-raja-ampat-tour-2026-buka-peluang-jadi-tuan-rumah-kejuaraan-voli-pantai-dunia", date: "", image: "", excerpt: "Ringkasan artikel tampil di sini, cukup satu sampai dua kalimat dengan kalimat sendiri." },
   { title: "Judul Artikel 3", category: "event-organizer", source: "Nama Situs", url: "", date: "", image: "", excerpt: "Ringkasan artikel tampil di sini, cukup satu sampai dua kalimat dengan kalimat sendiri." }
 
   /* Contoh isian jadi:
