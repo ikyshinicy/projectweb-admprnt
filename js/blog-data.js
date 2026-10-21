@@ -41,7 +41,7 @@ window.BLOG_CATEGORIES = [
 ];
 
 window.BLOG_VIDEOS = [
-  { title: "Judul Video 1", category: "tips-cetak",      url: "", desc: "Keterangan singkat video tampil di sini." },
+  { title: "Judul Video 1", category: "Festival Pesona Raja Ampat 2026",      url: "https://www.youtube.com/watch?v=K6zenWpcqUk", desc: "Festival Pesona Raja Ampat 2026: Ajang Promosi Wisata Bahari & Pelestarian Budaya" },
   { title: "Judul Video 2", category: "reklame",         url: "", desc: "Keterangan singkat video tampil di sini." },
   { title: "Judul Video 3", category: "event-organizer", url: "", desc: "Keterangan singkat video tampil di sini." }
 
