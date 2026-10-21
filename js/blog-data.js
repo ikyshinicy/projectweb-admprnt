@@ -54,9 +54,9 @@ window.BLOG_CATEGORIES = [
 window.BLOG_VIDEOS = [
   { title: "Festival Pesona Raja Ampat 2026", category: "event-organizer", url: "https://www.youtube.com/watch?v=K6zenWpcqUk", desc: "Festival Pesona Raja Ampat 2026: Ajang Promosi Wisata Bahari & Pelestarian Budaya" },
   { title: "Festival Pesona Raja Ampat & Gemarikan 2025", category: "event-organizer", url: "https://www.youtube.com/watch?v=ybjKaySWN_A", desc: "Festival Pesona Raja Ampat & Gemarikan 2025 hadir sebagai wujud kolaborasi budaya, pariwisata, dan edukasi gizi masyarakat. Melalui pertunjukan seni, kuliner lokal, dan kampanye makan ikan, festival ini mengangkat potensi Raja Ampat sebagai destinasi unggulan dan pusat ketahanan pangan laut." },
-  { title: "AVC Raja Ampat 2026", category: "event-organizer", url: "https://www.instagram.com/reel/DWx-cFljh2z/?utm_source=ig_web_copy_link&cplk=NTc4MTIwNjQ2YQ==", desc: "Angel Clinic hadir langsung di AVC Beach Volleyball Raja Ampat." }
-  { title: "Festival Pesona Raja Ampat 2026", category: "event-organizer", url: "https://www.instagram.com/reel/DeiBfmSSWa7/?utm_source=ig_web_copy_link&exln=NTc4MTIwNjQ2YQ==", desc: "Yuk, datang dan ramaikan Festival Pesona Raja Ampat 2026!" }
-{ title: "Festival Pesona Raja Ampat 2026", category: "event-organizer", url: "https://www.facebook.com/share/r/19XGkkQkJw/, desc: "Merayakan keindahan laut, kekayaan budaya, dan tradisi maritim Raja Ampat sebagai warisan kebanggaan yang menyatukan masyarakat dan dunia.!" }
+  { title: "AVC Raja Ampat 2026", category: "event-organizer", url: "https://www.instagram.com/reel/DWx-cFljh2z/?utm_source=ig_web_copy_link&cplk=NTc4MTIwNjQ2YQ==", desc: "Angel Clinic hadir langsung di AVC Beach Volleyball Raja Ampat." },
+  { title: "Festival Pesona Raja Ampat 2026", category: "event-organizer", url: "https://www.instagram.com/reel/DeiBfmSSWa7/?utm_source=ig_web_copy_link&exln=NTc4MTIwNjQ2YQ==", desc: "Yuk, datang dan ramaikan Festival Pesona Raja Ampat 2026!" },
+  { title: "Festival Pesona Raja Ampat 2026", category: "event-organizer", url: "https://www.facebook.com/share/r/19XGkkQkJw/", desc: "Merayakan keindahan laut, kekayaan budaya, dan tradisi maritim Raja Ampat sebagai warisan kebanggaan yang menyatukan masyarakat dan dunia.!" }
 
 
 
