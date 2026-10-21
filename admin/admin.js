@@ -21,8 +21,15 @@
   }
   function showApp(yes) { $('#login-view').hidden = yes; $('#app-view').hidden = !yes; }
   function dirty() { state.dirty = true; $('#dirty-banner').hidden = false; $('#publish-button').disabled = state.busy; $('#publish-status').textContent = 'Ada perubahan belum diterbitkan'; $('#publish-detail').textContent = 'Periksa kembali, lalu terbitkan semua perubahan sekaligus.'; }
-  function pathGet(path) { return path.split('.').reduce((v, k) => v == null ? undefined : v[k], state.content); }
-  function pathSet(path, value) { const parts = path.split('.'); const key = parts.pop(); const parent = parts.reduce((v, k) => v[k], state.content); parent[key] = value; }
+  // Nama file seperti "content/blog.json" memuat titik, jadi tidak boleh dipotong per titik.
+  function splitPath(path) {
+    const file = Object.values(PATHS).find(f => path === f || path.startsWith(f + '.'));
+    if (!file) return path.split('.');
+    const rest = path.slice(file.length + 1);
+    return rest ? [file, ...rest.split('.')] : [file];
+  }
+  function pathGet(path) { return splitPath(path).reduce((v, k) => v == null ? undefined : v[k], state.content); }
+  function pathSet(path, value) { const parts = splitPath(path); const key = parts.pop(); const parent = parts.reduce((v, k) => v[k], state.content); parent[key] = value; }
   function escId(value) { return String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'item-baru'; }
   function sectionConfig(key, path = '') {
     if (key === 'categories' && path.includes('blog.json')) return { title:'Kategori blog', singular:'kategori', defaults:{id:'kategori-baru',label:'Kategori Baru'} };
