@@ -50,6 +50,34 @@
     if (key === 'group') return (state.content['content/gallery.json'].groups || []).map(x => ({value:x.id,label:x.label}));
     return null;
   }
+  // Judul bagian layanan: data tersimpan sebagai HTML (<span class="accent">), tapi di panel dipecah jadi dua isian biasa.
+  const ACCENT_RE = /^([\s\S]*?)<span class="accent">([\s\S]*?)<\/span>([\s\S]*)$/;
+  function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function decodeEntities(s) { return String(s).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&'); }
+  function splitAccent(v) {
+    const m = ACCENT_RE.exec(v || '');
+    return m ? { before: decodeEntities(m[1]).replace(/\s+$/,''), accent: decodeEntities(m[2]), after: m[3] } : { before: decodeEntities(v || ''), accent: '', after: '' };
+  }
+  function composeAccent(before, accent, after) {
+    const b = escapeHtml(String(before).trim()); const a = escapeHtml(String(accent).trim());
+    let out = b; if (a) out += (b ? ' ' : '') + `<span class="accent">${a}</span>`;
+    return out + (after || '');
+  }
+  function updateAccentPreview(wrap) {
+    const [i1, i2] = wrap.querySelectorAll('input'); const box = wrap.querySelector('.accent-preview');
+    box.replaceChildren(document.createTextNode('Tampilan di situs: '));
+    const strong = el('strong'); strong.append(document.createTextNode((i1.value.trim() + (i2.value.trim() ? ' ' : ''))));
+    if (i2.value.trim()) strong.append(el('mark','',i2.value.trim()));
+    box.append(strong);
+  }
+  function accentTitleNode(wrap, path, value) {
+    const parts = splitAccent(value); wrap.classList.add('accent-field'); wrap.dataset.path = path; wrap.dataset.after = parts.after;
+    const row = el('div','accent-row');
+    const make = (label, hint, val, part) => { const box = el('div','field'); box.append(el('small','',label)); const input = el('input'); input.type = 'text'; input.maxLength = 200; input.value = val; input.placeholder = hint; input.dataset.accentPart = part; box.append(input); return box; };
+    row.append(make('Teks judul','contoh: Yang Bisa Kami',parts.before,'before'), make('Kata berwarna (boleh kosong)','contoh: Cetak',parts.accent,'accent'));
+    wrap.append(row, el('div','accent-preview')); updateAccentPreview(wrap);
+    return wrap;
+  }
   function fieldLabel(key) { return LABELS[key] || key.replace(/([A-Z])/g,' $1').replace(/^./, c => c.toUpperCase()); }
   function fieldNode(key, value, path, obj) {
     const wrap = el('div', `field${['lead','sectionLead','ctaLead','sectionTitle','whatsappMessage','address','desc','excerpt','icon','image','thumb','cover','src'].includes(key) ? ' full-width' : ''}`);
@@ -67,6 +95,7 @@
       }
       return wrap;
     }
+    if (key === 'sectionTitle' && path.startsWith(PATHS.layanan + '.')) return accentTitleNode(wrap, path, value);
     if (key === 'type') { const input=el('select'); [['photo','Foto'],['video','Video YouTube']].forEach(([v,l])=>{const o=el('option','',l);o.value=v;input.append(o);}); input.value=value || 'photo'; input.dataset.path=path;input.dataset.fieldInput='true';wrap.append(input);return wrap; }
     if (typeof value === 'boolean') {
       const line = el('label','inline-check'); const input = el('input'); input.type='checkbox'; input.checked=value; input.dataset.path=path; input.dataset.fieldInput='true'; line.append(input, document.createTextNode(value ? 'Ya, tampilkan sebagai unggulan' : 'Tidak')); wrap.append(line); return wrap;
@@ -226,6 +255,7 @@
   async function logout() {try{await api('/api/logout',{method:'POST',body:JSON.stringify({})});}catch(_){}state.content=null;state.baseSha='';state.dirty=false;showApp(false);}
   async function publish() {const errors=validateBeforePublish();if(errors.length){setMessage($('#global-message'),`Belum bisa diterbitkan: ${errors.slice(0,5).join(' ')}${errors.length>5?` Dan ${errors.length-5} masalah lainnya.`:''}`,'error');$('#global-message').scrollIntoView({behavior:'smooth',block:'center'});return;}if(!confirm('Terbitkan semua perubahan ke situs? Perubahan akan dikirim sebagai satu commit.'))return;state.busy=true;$('#publish-button').disabled=true;$('#publish-button').textContent='Sedang menerbitkan…';$('#publish-status').textContent='Sedang menerbitkan';$('#publish-detail').textContent='Mengirim satu commit ke GitHub. Jangan tutup panel dulu.';setMessage($('#global-message'),'Sedang menerbitkan konten…');try{const result=await api('/api/publish',{method:'POST',body:JSON.stringify({baseSha:state.baseSha,content:state.content})});state.dirty=false;$('#dirty-banner').hidden=true;state.baseSha=result.commit||state.baseSha;$('#publish-status').textContent='Konten berhasil dikirim';$('#publish-detail').textContent='Situs biasanya tayang sekitar 1–2 menit setelah build Vercel selesai.';setMessage($('#global-message'),result.message||'Konten berhasil diterbitkan. Situs biasanya tayang sekitar 1–2 menit.','success');}catch(error){setMessage($('#global-message'),error.message,'error');if(error.status===409)$('#publish-detail').textContent='Ada konflik versi. Muat ulang data dan periksa perubahan terbaru sebelum menerbitkan.';}finally{state.busy=false;$('#publish-button').disabled=!state.dirty;$('#publish-button').textContent='Terbitkan perubahan';}}
   document.addEventListener('input',event=>{const target=event.target;if(target.dataset.fieldInput==='true'){const old=pathGet(target.dataset.path);pathSet(target.dataset.path,target.type==='checkbox'?target.checked:target.value);if(old!==target.value||target.type==='checkbox')dirty();const note=$(`[data-platform-for="${CSS.escape(target.dataset.path)}"]`);if(note)note.textContent=`Platform terdeteksi: ${detectPlatform(target.value)}`;}});
+  document.addEventListener('input',event=>{const target=event.target;if(!target.dataset||!target.dataset.accentPart)return;const wrap=target.closest('.accent-field');const [i1,i2]=wrap.querySelectorAll('input');pathSet(wrap.dataset.path,composeAccent(i1.value,i2.value,wrap.dataset.after));updateAccentPreview(wrap);dirty();});
   document.addEventListener('change',event=>{const target=event.target;if(target.dataset.uploadPath){uploadImage(target.files[0],target.dataset.uploadPath,target.dataset.uploadFolder,target);}});
   document.addEventListener('click',event=>{const target=event.target.closest('button[data-action]');if(!target)return;const action=target.dataset.action; if(action==='toggle'||action==='toggle-sec'){const k=target.dataset.key;const set=action==='toggle'?state.open:state.closedSections;set.has(k)?set.delete(k):set.add(k);const y=window.scrollY;render();window.scrollTo(0,y);return;}
     if(action==='icon-pick'){pathSet(target.dataset.path,target.dataset.value);state.open.delete('icon:'+target.dataset.path);dirty();const y=window.scrollY;render();window.scrollTo(0,y);return;}if(action==='add-item'){addDefault(target.dataset.path,target.dataset.key);return;}if(action==='delete-item'){const title=target.dataset.title||'item ini';if(!confirm(`Hapus "${title}"? Tindakan ini baru berlaku di situs setelah diterbitkan.`))return;pathGet(target.dataset.path).splice(Number(target.dataset.index),1);for(const k of [...state.open])if(k.includes(target.dataset.path+'.'))state.open.delete(k);dirty();render();return;}if(action==='move-up'||action==='move-down'){const arr=pathGet(target.dataset.path);const index=Number(target.dataset.index);const next=index+(action==='move-up'?-1:1);if(next<0||next>=arr.length)return;[arr[index],arr[next]]=[arr[next],arr[index]];const ka=`${target.dataset.path}.${index}`,kb=`${target.dataset.path}.${next}`;const wa=state.open.has(ka),wb=state.open.has(kb);state.open.delete(ka);state.open.delete(kb);if(wa)state.open.add(kb);if(wb)state.open.add(ka);dirty();render();}});
