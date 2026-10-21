@@ -43,10 +43,7 @@ window.GALLERY_GROUPS = [
 ];
 
 /* Kategori = chip di dalam tab. `group` harus salah satu id di GALLERY_GROUPS.
-   Event Organizer belum punya kategori: tambahkan baris seperti
-     { id: "pernikahan", label: "Pernikahan", group: "event-organizer" },
-   lalu buat album dengan  category: "pernikahan". Chip hanya muncul kalau
-   bidang itu punya 2 kategori atau lebih yang sudah berisi album. */
+   Chip hanya muncul kalau bidang itu punya 2 kategori atau lebih yang sudah berisi album. */
 window.GALLERY_CATEGORIES = [
   { id: "kartu-nama",   label: "Kartu Nama",       group: "percetakan" },
   { id: "brosur-flyer", label: "Brosur & Flyer",   group: "percetakan" },
@@ -55,7 +52,10 @@ window.GALLERY_CATEGORIES = [
   { id: "souvenir",     label: "Souvenir",         group: "percetakan" },
   { id: "banner",       label: "Banner & Spanduk", group: "reklame" },
   { id: "neonbox",      label: "Neonbox",          group: "reklame" },
-  { id: "huruf-timbul", label: "Huruf Timbul",     group: "reklame" }
+  { id: "huruf-timbul", label: "Huruf Timbul",     group: "reklame" },
+  { id: "pernikahan",   label: "Pernikahan & Keluarga",      group: "event-organizer" },
+  { id: "seminar",      label: "Seminar & Launching",        group: "event-organizer" },
+  { id: "gathering",    label: "Gathering & Acara Instansi", group: "event-organizer" }
 ];
 
 window.GALLERY = [
@@ -147,6 +147,72 @@ window.GALLERY = [
       { type: "photo", src: "assets/images/galeri/souvenir-01/1.webp", alt: "Mug custom dengan logo" },
       { type: "photo", src: "assets/images/galeri/souvenir-01/2.webp", alt: "Topi dan kaos custom" },
       { type: "photo", src: "assets/images/galeri/souvenir-01/3.webp", alt: "Tumbler custom" }
+    ]
+  },
+  {
+    id: "pernikahan-01",
+    title: "Dekorasi Pelaminan & Resepsi",
+    category: "pernikahan",
+    featured: false,
+    items: [
+      { type: "photo", src: "assets/images/galeri/pernikahan-01/1.webp", alt: "Pelaminan dengan dekorasi bunga dan lampu" },
+      { type: "photo", src: "assets/images/galeri/pernikahan-01/2.webp", alt: "Meja tamu dan dekorasi pintu masuk resepsi" },
+      { type: "photo", src: "assets/images/galeri/pernikahan-01/3.webp", alt: "Tenda dan kursi tamu resepsi pernikahan" }
+    ]
+  },
+  {
+    id: "syukuran-01",
+    title: "Syukuran & Ulang Tahun",
+    category: "pernikahan",
+    featured: false,
+    items: [
+      { type: "photo", src: "assets/images/galeri/syukuran-01/1.webp", alt: "Dekorasi backdrop ulang tahun keluarga" },
+      { type: "photo", src: "assets/images/galeri/syukuran-01/2.webp", alt: "Tata meja dan kursi acara syukuran" },
+      { type: "photo", src: "assets/images/galeri/syukuran-01/3.webp", alt: "Dokumentasi acara keluarga" }
+    ]
+  },
+  {
+    id: "seminar-01",
+    title: "Seminar & Workshop",
+    category: "seminar",
+    featured: false,
+    items: [
+      { type: "photo", src: "assets/images/galeri/seminar-01/1.webp", alt: "Panggung seminar dengan backdrop dan podium" },
+      { type: "photo", src: "assets/images/galeri/seminar-01/2.webp", alt: "Peserta seminar duduk rapi dalam ruangan" },
+      { type: "photo", src: "assets/images/galeri/seminar-01/3.webp", alt: "Sound system dan layar presentasi" }
+    ]
+  },
+  {
+    id: "launching-01",
+    title: "Peluncuran Produk",
+    category: "seminar",
+    featured: false,
+    items: [
+      { type: "photo", src: "assets/images/galeri/launching-01/1.webp", alt: "Panggung peluncuran dengan lighting" },
+      { type: "photo", src: "assets/images/galeri/launching-01/2.webp", alt: "Backdrop peluncuran produk" },
+      { type: "photo", src: "assets/images/galeri/launching-01/3.webp", alt: "MC membuka acara launching" }
+    ]
+  },
+  {
+    id: "gathering-01",
+    title: "Gathering Perusahaan",
+    category: "gathering",
+    featured: false,
+    items: [
+      { type: "photo", src: "assets/images/galeri/gathering-01/1.webp", alt: "Tenda dan area gathering outdoor" },
+      { type: "photo", src: "assets/images/galeri/gathering-01/2.webp", alt: "Hiburan dan MC di acara gathering" },
+      { type: "photo", src: "assets/images/galeri/gathering-01/3.webp", alt: "Konsumsi dan catering untuk peserta" }
+    ]
+  },
+  {
+    id: "acara-instansi-01",
+    title: "Acara Instansi & Pemerintahan",
+    category: "gathering",
+    featured: false,
+    items: [
+      { type: "photo", src: "assets/images/galeri/acara-instansi-01/1.webp", alt: "Panggung acara resmi instansi" },
+      { type: "photo", src: "assets/images/galeri/acara-instansi-01/2.webp", alt: "Tenda dan kursi tamu undangan" },
+      { type: "photo", src: "assets/images/galeri/acara-instansi-01/3.webp", alt: "Dokumentasi foto acara instansi" }
     ]
   }
 ];
