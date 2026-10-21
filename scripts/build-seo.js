@@ -242,8 +242,8 @@ pages.forEach((p) => {
 write(
   "robots.txt",
   indexing.allow
-    ? `User-agent: *\nAllow: /\n\nSitemap: ${site.url}/sitemap.xml\n`
-    : `User-agent: *\nDisallow: /\n`
+    ? `User-agent: *\nDisallow: /admin\nDisallow: /api\nAllow: /\n\nSitemap: ${site.url}/sitemap.xml\n`
+    : `User-agent: *\nDisallow: /admin\nDisallow: /api\nDisallow: /\n`
 );
 
 /* ---------- sitemap.xml ---------- */
