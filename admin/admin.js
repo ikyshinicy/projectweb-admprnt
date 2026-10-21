@@ -189,9 +189,37 @@
     const site=all[PATHS.kontak];if(!/^\d{8,20}$/.test(site.whatsapp||''))errors.push('Nomor WhatsApp harus berupa angka dengan kode negara, tanpa tanda +.');
     return errors;
   }
+  function slugify(text, max = 60) { return String(text || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, max).replace(/-+$/g, ''); }
+  // Tentukan folder dan nama file di R2 dari lokasi kolom gambar: judul + kategori.
+  function uploadTarget(path, baseFolder) {
+    const fallback = { folder: baseFolder === 'galeri' ? 'gallery' : baseFolder, subfolders: [], name: '' };
+    try {
+      const parts = splitPath(path); const file = parts[0]; const field = parts[parts.length - 1];
+      const root = state.content[file];
+      if (file === PATHS.layanan && parts[1] === 'categories') {
+        const cat = root.categories[Number(parts[2])];
+        return { folder: 'layanan', subfolders: [cat.slug || cat.id], name: slugify(cat.title) };
+      }
+      if (file === PATHS.blog) {
+        const item = root[parts[1]][Number(parts[2])];
+        return { folder: 'blog', subfolders: [item.category], name: slugify([item.category, item.title].join('-')) };
+      }
+      if (file === PATHS.galeri && parts[1] === 'albums') {
+        const album = root.albums[Number(parts[2])];
+        const category = (root.categories || []).find(c => c.id === album.category);
+        const group = category && category.group ? category.group : 'umum';
+        const cat = slugify(album.category); const title = slugify(album.title);
+        let name = title.startsWith(cat) ? title : [cat, title].filter(Boolean).join('-');
+        if (field === 'cover') name += '-sampul';
+        else if (parts[3] === 'items') name += `-${Number(parts[4]) + 1}`;
+        return { folder: 'gallery', subfolders: [group], name };
+      }
+    } catch (_) {}
+    return fallback;
+  }
   async function uploadImage(file,path,folder,input) {
     if(!file)return;const progress=input.parentElement.parentElement.querySelector('.progress');if(progress)progress.textContent='Menyiapkan gambar…';
-    try { const bitmap=await createImageBitmap(file);const scale=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',0.82));if(!blob)throw new Error('Browser tidak bisa mengubah gambar ke WebP.');if(blob.size>2*1024*1024)throw new Error('Ukuran gambar setelah diperkecil masih lebih dari 2 MB. Pilih gambar yang lebih kecil.');const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Gambar gagal dibaca.'));reader.readAsDataURL(blob);});if(progress)progress.textContent='Mengunggah gambar…';const result=await api('/api/upload',{method:'POST',body:JSON.stringify({folder,mimeType:'image/webp',data})});pathSet(path,result.url);dirty();render();setMessage($('#global-message'), 'Gambar berhasil diunggah dan tautannya sudah dimasukkan.','success');}catch(error){if(progress)progress.textContent='';setMessage($('#global-message'),error.message,'error');}finally{input.value='';}
+    try { const bitmap=await createImageBitmap(file);const scale=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',0.82));if(!blob)throw new Error('Browser tidak bisa mengubah gambar ke WebP.');if(blob.size>2*1024*1024)throw new Error('Ukuran gambar setelah diperkecil masih lebih dari 2 MB. Pilih gambar yang lebih kecil.');const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Gambar gagal dibaca.'));reader.readAsDataURL(blob);});if(progress)progress.textContent='Mengunggah gambar…';const result=await api('/api/upload',{method:'POST',body:JSON.stringify({...uploadTarget(path,folder),mimeType:'image/webp',data})});pathSet(path,result.url);dirty();render();setMessage($('#global-message'), 'Gambar berhasil diunggah dan tautannya sudah dimasukkan.','success');}catch(error){if(progress)progress.textContent='';setMessage($('#global-message'),error.message,'error');}finally{input.value='';}
   }
   async function loadContent() { $('#reload-button').disabled=true;setMessage($('#global-message'),'Memuat konten dari GitHub…');try{const result=await api('/api/content');state.content=result.content;state.baseSha=result.baseSha;state.dirty=false;$('#dirty-banner').hidden=true;$('#publish-button').disabled=true;$('#publish-status').textContent='Belum ada perubahan';$('#publish-detail').textContent='Konten akan diperiksa sebelum dikirim ke GitHub.';$('#connection-state').textContent='Sesi aktif';render();setMessage($('#global-message'),'Konten berhasil dimuat.','success');}catch(error){setMessage($('#global-message'),error.message,'error');if(error.status===401){showApp(false);}}finally{$('#reload-button').disabled=false;} }
   async function login(event) {event.preventDefault();const input=$('#password');const message=$('#login-message');setMessage(message,'Memeriksa kata sandi…');try{await api('/api/login',{method:'POST',body:JSON.stringify({password:input.value})});input.value='';showApp(true);await loadContent();}catch(error){setMessage(message,error.message,'error');}}
