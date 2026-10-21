@@ -6,16 +6,18 @@ Landing page statis (HTML, CSS, JS biasa) untuk ADAM XII PRINTING — Percetakan
 
 ```
 index.html            beranda (3 kartu layanan + cuplikan galeri)
-tentang/index.html    halaman Tentang Kami (profil, bidang usaha, keunggulan, lokasi)
+tentang/index.html    halaman Tentang Kami (profil, bidang usaha, keunggulan, lokasi, partner)
+blog/index.html       halaman Blog (video YouTube + artikel web; isi di js/blog-data.js)
 galeri/index.html     halaman galeri lengkap (filter + album)
 layanan/              HASIL BUILD: /layanan/ + percetakan, reklame, event-organizer
 content/layanan.json  isi semua halaman layanan (daftar layanan per kategori)
 partials/             header & footer (ditulis sekali, dipasang ke semua halaman)
 templates/            kerangka halaman layanan
-css/                  base (warna), layout, components, sections, gallery, about, responsive
+css/                  base (warna), layout, components, sections, gallery, about, blog, responsive
 js/config.js          nomor WhatsApp, alamat, jam buka, Instagram
 js/main.js            menu mobile, nav aktif, animasi, link WhatsApp
 js/gallery-data.js    SEMUA isi galeri (album, kategori, foto)
+js/blog-data.js       SEMUA isi blog (video YouTube, artikel web, kategori)
 js/gallery.js         kartu album + tampilan besar (geser foto)
 seo/seo.config.json   SATU file kontrol SEO
 scripts/build.js      jalankan SEMUA build (partials + SEO)
@@ -40,7 +42,22 @@ assets/images/        semua gambar, dikelompokkan per section
 
 `tentang/index.html` ditulis langsung (bukan hasil build), edit teksnya di file itu. Alamat dan jam buka
 otomatis dari `js/config.js`. Gambar profil memakai `assets/images/hero/toko-hero.webp`; ganti `src`-nya kalau
-ada foto toko/tim yang asli. Header, footer, dan SEO tetap diisi lewat `node scripts/build.js`.
+ada foto toko/tim yang asli. Bagian **Partner** (di bawah "Lokasi & Jam Buka"): taruh logo di `assets/images/partner/partner-1.webp`,
+`partner-2.webp`, dst, lalu ganti nama di `<figcaption>` dan teks `alt`. Salin satu blok `<figure class="partner">`
+untuk menambah partner. Logo belum ada = tampil kotak placeholder.
+Header, footer, dan SEO tetap diisi lewat `node scripts/build.js`.
+
+## Blog
+
+Halaman `blog/` punya 2 bagian: **Video YouTube** (atas) dan **Artikel dari web** (bawah, tautan ke situs lain).
+Semua isinya diatur di `js/blog-data.js` (petunjuk lengkap ada di komentar file itu):
+
+- tambah video: salin satu blok di `BLOG_VIDEOS`, tempel link YouTube di `url` (diputar langsung di halaman)
+- tambah artikel: salin satu blok di `BLOG_ARTICLES`: judul, nama situs sumber, `url` artikel asli, ringkasan dengan kalimat sendiri
+- kategori (tombol filter) diatur di `BLOG_CATEGORIES`; `url` kosong = kotak "Segera hadir"
+- sampul artikel/video buatan sendiri: taruh di `assets/images/blog/`
+
+`js/blog.js` yang menampilkan semuanya, jadi tidak perlu mengubah HTML.
 
 ## Halaman layanan
 

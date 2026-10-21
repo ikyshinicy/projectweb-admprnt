@@ -14,7 +14,7 @@
   },
   "pages": [
     {
-      "_catatan": "Satu blok per halaman. file = lokasi HTML, path = alamat di situs. schema: business (beranda), about (tentang kami), collection (galeri, daftar layanan), atau service (satu kategori; isi field category).",
+      "_catatan": "Satu blok per halaman. file = lokasi HTML, path = alamat di situs. schema: business (beranda), about (tentang kami), blog, collection (galeri, daftar layanan), atau service (satu kategori; isi field category).",
       "file": "index.html",
       "path": "/",
       "schema": "business",
@@ -83,6 +83,32 @@
         [
           "Tentang Kami",
           "/tentang/"
+        ]
+      ]
+    },
+    {
+      "file": "blog/index.html",
+      "path": "/blog/",
+      "schema": "blog",
+      "priority": "0.7",
+      "nav": "blog",
+      "title": "Blog | Video & Artikel Cetak, Reklame, Event Organizer",
+      "description": "Video YouTube dan artikel pilihan seputar percetakan, reklame, dan event organizer dari ADAM XII PRINTING Sorong.",
+      "keywords": [
+        "blog percetakan Sorong",
+        "video percetakan",
+        "tips cetak banner",
+        "tips reklame",
+        "tips event organizer Sorong"
+      ],
+      "crumbs": [
+        [
+          "Beranda",
+          "/"
+        ],
+        [
+          "Blog",
+          "/blog/"
         ]
       ]
     },

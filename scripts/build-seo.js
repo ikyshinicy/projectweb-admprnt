@@ -125,6 +125,24 @@ function aboutSchema(p) {
   };
 }
 
+// Halaman Blog
+function blogSchema(p) {
+  return {
+    "@context": ctx,
+    "@graph": [
+      {
+        "@type": "Blog",
+        name: p.title,
+        description: p.description,
+        url: site.url + p.path,
+        isPartOf: { "@type": "WebSite", name: site.name, url: site.url + "/" },
+        publisher: { "@type": business.type || "LocalBusiness", name: business.name, url: site.url + "/" }
+      },
+      crumbList(p)
+    ]
+  };
+}
+
 // Halaman satu kategori layanan: daftar isinya jadi katalog penawaran
 function serviceSchema(p) {
   const c = content.categories.find((x) => x.id === p.category);
@@ -186,7 +204,7 @@ function headBlock(p) {
   L.push(`<meta name="twitter:description" content="${esc(p.description)}">`);
   L.push(`<meta name="twitter:image" content="${esc(abs(social.ogImage))}">`);
   L.push("");
-  const schema = p.schema === "service" ? serviceSchema(p) : p.schema === "business" ? businessSchema : p.schema === "about" ? aboutSchema(p) : collectionSchema(p);
+  const schema = p.schema === "service" ? serviceSchema(p) : p.schema === "business" ? businessSchema : p.schema === "about" ? aboutSchema(p) : p.schema === "blog" ? blogSchema(p) : collectionSchema(p);
   L.push(p.schema === "business" ? "<!-- Schema.org: bisnis lokal -->" : "<!-- Schema.org: halaman layanan/galeri/tentang -->");
   L.push(`<script type="application/ld+json">`);
   L.push(JSON.stringify(schema, null, 2));
