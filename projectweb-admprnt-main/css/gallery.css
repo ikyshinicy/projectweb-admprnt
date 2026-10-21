@@ -1,0 +1,161 @@
+/* ==========================================================
+   gallery.css — kartu album (seperti sampul album foto),
+   filter kategori, dan tampilan besar (lightbox).
+   Dipakai di beranda dan /galeri/. Dibuat oleh js/gallery.js.
+   ========================================================== */
+
+.gallery-page { padding-top: 44px; }
+
+/* ---------- Filter: tab bidang + chip kategori ---------- */
+.filters { margin-bottom: 30px; }
+.gtabs, .filters-sub { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters-sub { margin-top: 12px; }
+.gtab { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; font-size: 15px; }
+.gtab-n {
+  min-width: 22px; padding: 1px 7px; border-radius: var(--radius-pill);
+  background: var(--light-cyan); color: var(--primary-blue); font-size: 12px; text-align: center;
+}
+.gtab[aria-pressed="true"] .gtab-n { background: rgba(255, 255, 255, .25); color: var(--white); }
+.filters-sub .chip { padding: 7px 14px; font-size: 13px; }
+.filters-sub .chip[aria-pressed="true"] {
+  background: var(--light-cyan); color: var(--primary-blue); border-color: var(--primary-cyan);
+}
+
+/* ---------- Grid & kartu album ---------- */
+.album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px 22px; }
+.gallery-empty { grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 40px 0; }
+
+.album-card {
+  display: flex; flex-direction: column; justify-content: flex-start; align-self: start;
+  width: 100%; padding: 0 0 12px;
+  background: none; border: 0; text-align: left; color: inherit;
+}
+.album-stack { display: block; position: relative; }
+
+/* Dua lembar di belakang sampul = kesan tumpukan foto */
+.album-stack::before, .album-stack::after {
+  content: ""; position: absolute; inset: 0; border-radius: 22px;
+  transition: transform .3s ease;
+}
+.album-stack::before { background: var(--border-color); transform: translateY(10px) scale(.92); }
+.album-stack::after { background: var(--light-cyan); transform: translateY(5px) scale(.96); }
+.album-stack.is-single::before, .album-stack.is-single::after { display: none; }
+.album-card:hover .album-stack::before { transform: translate(-7px, 9px) rotate(-3.5deg) scale(.95); }
+.album-card:hover .album-stack::after { transform: translate(7px, 6px) rotate(3deg) scale(.97); }
+
+.album-media {
+  display: block; position: relative; z-index: 1; overflow: hidden;
+  aspect-ratio: 4 / 3; border-radius: 22px;
+  background: linear-gradient(135deg, var(--light-cyan), var(--white));
+  box-shadow: var(--shadow-card);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.album-card:hover .album-media { transform: translateY(-5px); box-shadow: var(--shadow-lift); }
+.album-media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.album-card:hover .album-media img { transform: scale(1.05); }
+
+.album-count {
+  position: absolute; top: 12px; right: 12px;
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  background: var(--overlay); color: var(--white);
+  font-size: 12px; font-weight: 700;
+}
+.album-open {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 12px 12px;
+  background: linear-gradient(to top, var(--overlay), transparent);
+  color: var(--white); text-align: center; font-size: 13px; font-weight: 800;
+  opacity: 0; transition: opacity .25s;
+}
+.album-card:hover .album-open, .album-card:focus-visible .album-open { opacity: 1; }
+
+.album-info { display: block; padding: 20px 4px 0; }
+.album-cat { display: block; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--primary-blue); }
+.album-title { display: block; margin-top: 3px; font-size: 17px; font-weight: 800; color: var(--deep-navy); line-height: 1.25; }
+
+/* ---------- Lightbox ---------- */
+.lb { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 18px; }
+.lb-backdrop { position: absolute; inset: 0; background: var(--overlay); }
+.lb-panel {
+  position: relative; z-index: 1; width: min(1040px, 100%); max-height: 100%;
+  display: flex; flex-direction: column; gap: 14px; overflow: auto;
+  background: var(--white); border-radius: var(--radius-lg); padding: 14px;
+}
+.lb-stage {
+  position: relative; height: min(62vh, 620px); border-radius: 20px; overflow: hidden;
+  background: var(--footer-navy); display: grid; place-items: center; touch-action: pan-y;
+}
+.lb-img { width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+
+.lb-close, .lb-nav {
+  position: absolute; z-index: 2; display: grid; place-items: center;
+  border: 0; border-radius: 50%; background: rgba(255, 255, 255, .92); color: var(--deep-navy);
+  box-shadow: 0 6px 18px rgba(3, 44, 76, .25); transition: background .2s, transform .2s;
+}
+.lb-close:hover, .lb-nav:hover { background: var(--white); }
+.lb-close { top: 12px; right: 12px; width: 44px; height: 44px; }
+.lb-nav { top: 50%; width: 50px; height: 50px; transform: translateY(-50%); }
+.lb-nav:hover { transform: translateY(-50%) scale(1.08); }
+.lb-prev { left: 12px; }
+.lb-next { right: 12px; }
+.lb-close svg, .lb-nav svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.lb-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; padding: 0 4px; }
+.lb-cat { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--primary-blue); }
+.lb-title { font-size: 24px; letter-spacing: -.5px; margin-top: 2px; }
+.lb-count { font-size: 15px; font-weight: 800; color: var(--text-secondary); white-space: nowrap; }
+
+.lb-thumbs { display: flex; gap: 8px; overflow-x: auto; padding: 3px 4px 6px; }
+.lb-thumb {
+  flex: none; width: 72px; height: 54px; padding: 0; overflow: hidden;
+  border: 2px solid transparent; border-radius: 10px; background: var(--light-cyan);
+  opacity: .6; transition: opacity .2s, border-color .2s;
+}
+.lb-thumb:hover { opacity: 1; }
+.lb-thumb.active { border-color: var(--accent-orange); opacity: 1; }
+.lb-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.lb-wa { align-self: flex-start; margin: 0 4px 4px; }
+
+/* ---------- Video (YouTube) ---------- */
+.album-play, .lb-play {
+  display: grid; place-items: center; border-radius: 50%;
+  background: rgba(255, 255, 255, .94); color: var(--accent-orange);
+  box-shadow: 0 8px 24px rgba(3, 44, 76, .35);
+}
+.album-play svg, .lb-play svg { fill: currentColor; margin-left: 3px; }
+
+/* Tombol putar di tengah sampul kartu */
+.album-play {
+  position: absolute; z-index: 1; top: 50%; left: 50%; width: 58px; height: 58px;
+  transform: translate(-50%, -50%); transition: transform .25s ease; pointer-events: none;
+}
+.album-play svg { width: 26px; height: 26px; }
+.album-card:hover .album-play { transform: translate(-50%, -50%) scale(1.1); }
+
+/* Tombol putar besar di lightbox */
+.lb-play {
+  position: absolute; z-index: 1; top: 50%; left: 50%; width: 84px; height: 84px;
+  transform: translate(-50%, -50%); border: 0; transition: transform .2s ease;
+}
+.lb-play svg { width: 38px; height: 38px; }
+.lb-play:hover { transform: translate(-50%, -50%) scale(1.08); }
+
+/* Pemutar YouTube mengisi panggung; tombol navigasi tetap di atasnya */
+.lb-video { position: absolute; inset: 0; background: #000; }
+.lb-video iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+/* Sampul video: isi penuh supaya tidak ada bingkai hitam di kiri-kanan */
+.lb-stage.is-video .lb-img { object-fit: cover; }
+
+/* Ikon kecil di thumbnail video */
+.lb-thumb { position: relative; }
+.lb-thumb-play {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: rgba(3, 44, 76, .35); color: var(--white);
+}
+.lb-thumb-play svg { width: 20px; height: 20px; fill: currentColor; }
+
+@media (max-width: 640px) {
+  .album-play { width: 48px; height: 48px; }
+  .lb-play { width: 68px; height: 68px; }
+}

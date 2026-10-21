@@ -1,0 +1,79 @@
+/* ==========================================================
+   blog.css — halaman Blog (daftar artikel + filter kategori)
+   Warna & ukuran dari base.css. Chip filter memakai .chip.
+   ========================================================== */
+
+.blog-toolbar { padding: 32px 0 0; }
+.blog-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.blog-video { padding-top: 44px; }
+.blog-articles { background: var(--soft-gray); }
+
+.blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.post { display: flex; flex-direction: column; }
+
+.post-media {
+  position: relative; display: grid; place-items: center;
+  aspect-ratio: 16 / 10; margin: 12px 12px 0; border-radius: var(--radius-sm);
+}
+.post-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.post-ph {
+  display: none; width: 40px; height: 40px; stroke: var(--primary-cyan); fill: none;
+  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: .7;
+}
+.post-media img.is-broken ~ .post-ph { display: block; }
+
+.post-body { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 18px 22px 22px; flex: 1; }
+.post-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: 12px; color: var(--text-secondary); }
+.post-cat {
+  padding: 4px 11px; border-radius: var(--radius-pill);
+  background: var(--ice-blue); color: var(--primary-blue); font-weight: 800;
+}
+.post h3 { font-size: 18px; line-height: 1.3; }
+.post h3 a:hover { color: var(--accent-orange); }
+.post p { color: var(--text-secondary); font-size: 14px; flex: 1; }
+
+/* Video: rasio 16:9 + tombol putar; iframe mengisi penuh */
+.video-media { aspect-ratio: 16 / 9; }
+.video-media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: inherit; }
+.video-play {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--gradient-orange); color: var(--white); box-shadow: var(--shadow-cta);
+  transition: transform .2s;
+}
+.video-play svg { width: 26px; height: 26px; fill: currentColor; margin-left: 3px; }
+.video-play:hover { transform: translate(-50%, -50%) scale(1.08); }
+.video-media.is-playing { background: #000; }
+
+/* Video portrait (Instagram / TikTok / Shorts): rasio 9:16, grid 4 kolom sendiri */
+.blog-grid[hidden] { display: none; }
+.blog-grid--portrait { grid-template-columns: repeat(4, 1fr); }
+.blog-grid:not([hidden]) + .blog-grid--portrait { margin-top: 22px; }
+.video-media--portrait { aspect-ratio: 9 / 16; }
+.video-media--portrait iframe { background: #fff; }
+/* Embed Instagram membawa bilah atas & bawah, jadi saat diputar butuh sedikit lebih tinggi */
+.video-media--portrait.is-ig.is-playing { aspect-ratio: 9 / 18; }
+
+/* Placeholder "Segera hadir" */
+.post-soon {
+  position: absolute; left: 10px; top: 10px; padding: 4px 11px; border-radius: var(--radius-pill);
+  background: var(--white); color: var(--text-secondary); font-size: 11px; font-weight: 800;
+  border: 1px solid var(--border-color);
+}
+
+.blog-empty { grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 40px 0; }
+
+@media (max-width: 980px) {
+  .blog-grid { grid-template-columns: repeat(2, 1fr); }
+  .blog-grid--portrait { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  .blog-toolbar { padding-top: 24px; }
+  .blog-video { padding-top: 32px; }
+  .video-play { width: 54px; height: 54px; }
+  .blog-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+  .blog-grid--portrait { grid-template-columns: 1fr; max-width: 340px; }
+  .blog-filters { flex-wrap: nowrap; overflow-x: auto; margin-inline: -4%; padding: 0 4% 8px; scrollbar-width: none; }
+  .blog-filters::-webkit-scrollbar { display: none; }
+  .blog-filters .chip { flex: none; }
+}

@@ -1,0 +1,74 @@
+{
+  "_catatan": "SEMUA isi halaman layanan. Edit di sini lalu jalankan: node scripts/build.js. Ikon: copy, idcard, banner, billboard, card, brochure, stamp, sticker, book, mug, letters, neon, signboard, bulb, car, build, clipboard, stage, sound, tent, mic, camera, food, users, heart, printer, calendar, cube.",
+  "categories": [
+    {
+      "id": "percetakan",
+      "slug": "percetakan",
+      "title": "Percetakan",
+      "icon": "printer",
+      "image": "assets/images/layanan/kartu-nama.webp",
+      "tagline": "Dari fotocopy harian sampai spanduk dan baliho ukuran besar.",
+      "lead": "Kebutuhan cetak untuk personal, sekolah, instansi, UMKM, hingga perusahaan: cepat, rapi, dan harga terjangkau.",
+      "sectionTitle": "Yang Bisa Kami <span class=\"accent\">Cetak</span>",
+      "sectionLead": "Pilih jenis cetakan yang Anda butuhkan. Ukuran, bahan, dan jumlah bisa disesuaikan.",
+      "ctaLead": "Kirim ukuran dan jumlahnya lewat WhatsApp, kami hitungkan harganya.",
+      "items": [
+        { "title": "Fotocopy & Print", "icon": "copy", "desc": "Fotocopy hitam putih dan warna, serta print dokumen berbagai ukuran kertas." },
+        { "title": "ID Card & Lanyard", "icon": "idcard", "desc": "ID card karyawan, siswa, dan panitia, lengkap dengan tali lanyard dan holder." },
+        { "title": "Spanduk & Banner", "icon": "banner", "desc": "Spanduk, banner, dan x-banner untuk promosi, acara, dan kebutuhan outdoor." },
+        { "title": "Baliho", "icon": "billboard", "desc": "Cetak baliho ukuran besar yang tahan cuaca dengan warna tajam." },
+        { "title": "Kartu Nama", "icon": "card", "desc": "Kartu nama berbagai bahan dan finishing untuk identitas bisnis Anda." },
+        { "title": "Brosur & Flyer", "icon": "brochure", "desc": "Media promosi yang informatif dan menarik, dari brosur lipat sampai flyer." },
+        { "title": "Stempel", "icon": "stamp", "desc": "Stempel manual maupun otomatis untuk instansi, usaha, dan pribadi." },
+        { "title": "Stiker & Label", "icon": "sticker", "desc": "Stiker vinyl, transparan, dan label produk, bisa potong sesuai bentuk." },
+        { "title": "Laminating & Jilid", "icon": "book", "desc": "Laminating dokumen dan penjilidan untuk laporan, proposal, dan skripsi." },
+        { "title": "Souvenir Custom", "icon": "mug", "desc": "Mug, kaos, topi, dan tumbler dengan desain sendiri." }
+      ]
+    },
+    {
+      "id": "reklame",
+      "slug": "reklame",
+      "title": "Reklame",
+      "icon": "build",
+      "image": "assets/images/layanan/neonbox.webp",
+      "tagline": "Pembuatan dan pemasangan huruf timbul, neonbox, dan papan nama.",
+      "lead": "Pengerjaan lapangan dari survei lokasi, produksi, sampai pemasangan, untuk toko, kantor, dan gedung.",
+      "sectionTitle": "Yang Bisa Kami <span class=\"accent\">Kerjakan</span>",
+      "sectionLead": "Dari papan nama sederhana sampai konstruksi reklame, dikerjakan dan dipasang oleh tim kami.",
+      "ctaLead": "Kirim foto lokasi dan perkiraan ukuran lewat WhatsApp, kami bantu survei dan penawaran.",
+      "items": [
+        { "title": "Huruf Timbul", "icon": "letters", "desc": "Huruf timbul akrilik, ACP, galvanis, dan stainless untuk papan nama dan dinding." },
+        { "title": "Neonbox", "icon": "neon", "desc": "Neonbox indoor dan outdoor berbagai ukuran dengan lampu LED hemat listrik." },
+        { "title": "Papan Nama Kantor", "icon": "signboard", "desc": "Papan nama kantor, instansi, dan toko, termasuk plang dan petunjuk arah." },
+        { "title": "Papan Reklame", "icon": "billboard", "desc": "Pembuatan rangka dan papan reklame untuk promosi usaha di tepi jalan." },
+        { "title": "Neon Flex & Lampu LED", "icon": "bulb", "desc": "Neon flex dan lampu LED untuk memperjelas papan nama, terutama di malam hari." },
+        { "title": "Branding Kendaraan & Kaca", "icon": "car", "desc": "Stiker cutting dan branding untuk mobil, motor, dan kaca toko." },
+        { "title": "Pemasangan & Perawatan", "icon": "build", "desc": "Survei lokasi, pemasangan, perbaikan, dan penggantian papan reklame." }
+      ]
+    },
+    {
+      "id": "event-organizer",
+      "slug": "event-organizer",
+      "title": "Event Organizer",
+      "icon": "calendar",
+      "image": "assets/images/layanan/event-organizer.webp",
+      "tagline": "Perencanaan sampai pelaksanaan acara, dari konsep hingga acara selesai.",
+      "lead": "Serahkan acara Anda ke tim kami: instansi, perusahaan, sekolah, komunitas, hingga acara keluarga.",
+      "sectionTitle": "Yang Bisa Kami <span class=\"accent\">Tangani</span>",
+      "sectionLead": "Bisa dipesan lengkap satu paket, atau hanya bagian yang Anda butuhkan.",
+      "ctaLead": "Ceritakan jenis acara, tanggal, dan perkiraan jumlah tamu lewat WhatsApp.",
+      "items": [
+        { "title": "Konsep & Perencanaan Acara", "icon": "clipboard", "desc": "Menyusun konsep, rundown, anggaran, dan pembagian tugas sampai hari acara." },
+        { "title": "Desain 3D Skala 1:1", "icon": "cube", "desc": "Visual 3D panggung, booth, dan tata ruang acara dengan skala 1:1, supaya hasilnya bisa dilihat sebelum dikerjakan." },
+        { "title": "Dekorasi, Panggung & Backdrop", "icon": "stage", "desc": "Dekorasi ruangan, panggung, dan backdrop sesuai tema acara." },
+        { "title": "Sound System & Lighting", "icon": "sound", "desc": "Perlengkapan suara dan pencahayaan untuk acara indoor maupun outdoor." },
+        { "title": "Tenda, Kursi & Meja", "icon": "tent", "desc": "Sewa tenda, kursi, meja, dan perlengkapan acara lainnya." },
+        { "title": "MC & Hiburan", "icon": "mic", "desc": "Pembawa acara dan hiburan yang disesuaikan dengan suasana acara." },
+        { "title": "Dokumentasi Foto & Video", "icon": "camera", "desc": "Foto dan video acara untuk arsip, laporan, dan kebutuhan publikasi." },
+        { "title": "Konsumsi & Catering", "icon": "food", "desc": "Penyediaan konsumsi dan catering sesuai jumlah tamu." },
+        { "title": "Seminar, Gathering & Launching", "icon": "users", "desc": "Acara instansi dan perusahaan: seminar, rapat besar, gathering, dan peluncuran." },
+        { "title": "Pernikahan & Acara Keluarga", "icon": "heart", "desc": "Pendampingan acara pernikahan, syukuran, ulang tahun, dan acara keluarga." }
+      ]
+    }
+  ]
+}

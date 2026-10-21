@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- SEO:START — diisi otomatis oleh build-seo.js. -->
+<!-- SEO:END -->
+
+<link rel="icon" href="{{root}}assets/favicon.ico" sizes="any">
+<link rel="icon" href="{{root}}assets/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="{{root}}assets/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="{{root}}assets/apple-touch-icon.png">
+<link rel="manifest" href="{{root}}site.webmanifest">
+<meta name="theme-color" content="#087FA8">
+
+<link rel="stylesheet" href="{{root}}css/base.css">
+<link rel="stylesheet" href="{{root}}css/layout.css">
+<link rel="stylesheet" href="{{root}}css/components.css">
+<link rel="stylesheet" href="{{root}}css/sections.css">
+<link rel="stylesheet" href="{{root}}css/services.css">
+<link rel="stylesheet" href="{{root}}css/responsive.css">
+</head>
+<body>
+
+<!-- PARTIAL:header -->
+<!-- /PARTIAL:header -->
+
+<main>
+
+<section class="page-head">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{{root}}">Beranda</a><span aria-hidden="true">/</span><a href="{{root}}layanan/">Layanan</a><span aria-hidden="true">/</span><span aria-current="page">{{title}}</span>
+    </nav>
+    <p class="kicker">Layanan Kami</p>
+    <h1 class="page-title">Layanan <span class="accent">{{title}}</span></h1>
+    <p class="page-lead">{{lead}}</p>
+    <div class="page-actions">
+      <a class="btn btn-primary" data-wa data-wa-text="Halo ADAM XII PRINTING, saya mau tanya layanan {{title}}." href="{{wa_url}}">
+        Konsultasi {{title}}
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn-outline" href="{{root}}galeri/#{{slug}}">Lihat Galeri</a>
+    </div>
+  </div>
+</section>
+
+<section class="svc-page">
+  <div class="container">
+    <nav class="svc-tabs" aria-label="Jenis layanan">
+      {{tabs}}
+    </nav>
+
+    <div class="section-head">
+      <div>
+        <p class="kicker">{{title}}</p>
+        <h2>{{section_title}}</h2>
+      </div>
+      <p>{{section_lead}}</p>
+    </div>
+
+    <div class="item-grid">
+{{items}}
+    </div>
+  </div>
+</section>
+
+<section class="final-cta" id="kontak">
+  <div class="container cta-row">
+    <div>
+      <h2>Butuh <span class="accent">{{title}}?</span></h2>
+      <p>{{cta_lead}}</p>
+    </div>
+    <a class="btn btn-primary btn-cta-big" data-wa data-wa-text="Halo ADAM XII PRINTING, saya mau tanya layanan {{title}}." href="{{wa_url}}">
+      Hubungi Kami Sekarang
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- PARTIAL:footer -->
+<!-- /PARTIAL:footer -->
+
+<script src="{{root}}js/config.js"></script>
+<script src="{{root}}js/main.js" defer></script>
+</body>
+</html>
