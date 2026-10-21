@@ -37,10 +37,12 @@
   "name": "ADAM XII PRINTING",
   "description": "Percetakan dan reklame di Sorong untuk kebutuhan personal, instansi, UMKM, dan perusahaan.",
   "url": "https://example.com/",
+  "telephone": "+6281293419534",
   "logo": "https://example.com/assets/images/brand/logo.png",
   "image": "https://example.com/assets/images/og/og-cover.jpg",
   "address": {
     "@type": "PostalAddress",
+    "streetAddress": "Jl. Basuki Rahmat KM 11 - Depan Poltekes",
     "addressLocality": "Sorong",
     "addressRegion": "Papua Barat Daya",
     "addressCountry": "ID"
@@ -53,7 +55,10 @@
 </script>
 <!-- SEO:END -->
 
-<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="assets/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#087FA8">
 
@@ -62,6 +67,7 @@
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/sections.css">
+<link rel="stylesheet" href="css/gallery.css">
 <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
@@ -81,9 +87,9 @@
       <a class="active" href="#beranda">Beranda</a>
       <a href="#tentang">Tentang Kami</a>
       <a href="#layanan">Layanan</a>
-      <a href="#galeri">Galeri</a>
+      <a href="galeri/">Galeri</a>
       <a href="#kontak">Kontak</a>
-      <a class="btn btn-primary btn-sm" data-wa href="https://wa.me/6281234567890">Pesan Sekarang</a>
+      <a class="btn btn-primary btn-sm" data-wa href="https://wa.me/6281293419534">Pesan Sekarang</a>
     </nav>
 
     <button class="menu-toggle" id="menuToggle" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="drawer">
@@ -103,9 +109,9 @@
   <a href="#tentang">Tentang Kami</a>
   <a href="#layanan">Layanan</a>
   <a href="#proses">Alur Pemesanan</a>
-  <a href="#galeri">Galeri</a>
+  <a href="galeri/">Galeri</a>
   <a href="#kontak">Kontak</a>
-  <a class="btn btn-primary" data-wa href="https://wa.me/6281234567890">Pesan Sekarang</a>
+  <a class="btn btn-primary" data-wa href="https://wa.me/6281293419534">Pesan Sekarang</a>
 </aside>
 
 <main>
@@ -119,7 +125,7 @@
       <p class="hero-copy">Melayani berbagai kebutuhan percetakan, desain, dan reklame untuk personal, instansi, UMKM, hingga perusahaan dengan hasil berkualitas dan harga terjangkau.</p>
 
       <div class="hero-actions">
-        <a class="btn btn-primary" data-wa href="https://wa.me/6281234567890">
+        <a class="btn btn-primary" data-wa href="https://wa.me/6281293419534">
           Konsultasi Sekarang
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
@@ -148,7 +154,6 @@
         </li>
       </ul>
     </div>
-
   </div>
 </section>
 
@@ -174,7 +179,7 @@
       </article>
 
       <article class="card service-card reveal">
-        <div class="service-img img-slot"><img src="assets/images/layanan/brosur-flyer.png" alt="Cetak brosur dan flyer promosi di Sorong" width="400" height="320" loading="lazy"></div>
+        <div class="service-img img-slot"><img src="assets/images/layanan/brosur-flyer.webp" alt="Cetak brosur dan flyer promosi di Sorong" width="400" height="320" loading="lazy"></div>
         <div class="service-body">
           <h3>Brosur &amp; Flyer</h3>
           <p>Media promosi yang informatif dan menarik.</p>
@@ -201,7 +206,7 @@
       </article>
 
       <article class="card service-card reveal">
-        <div class="service-img img-slot"><img src="assets/images/layanan/stiker.png" alt="Cetak stiker vinyl dan label produk di Sorong" width="400" height="320" loading="lazy"></div>
+        <div class="service-img img-slot"><img src="assets/images/layanan/stiker.webp" alt="Cetak stiker vinyl dan label produk di Sorong" width="400" height="320" loading="lazy"></div>
         <div class="service-body">
           <h3>Stiker</h3>
           <p>Vinyl, transparan, label produk, dan kebutuhan branding.</p>
@@ -228,7 +233,7 @@
       </article>
 
       <article class="card service-card reveal">
-        <div class="service-img img-slot"><img src="assets/images/layanan/souvenir.png" alt="Souvenir custom: mug, kaos, topi, dan tumbler" width="400" height="320" loading="lazy"></div>
+        <div class="service-img img-slot"><img src="assets/images/layanan/souvenir.webp" alt="Souvenir custom: mug, kaos, topi, dan tumbler" width="400" height="320" loading="lazy"></div>
         <div class="service-body">
           <h3>Souvenir</h3>
           <p>Mug, kaos, topi, tumbler, dan merchandise custom.</p>
@@ -317,13 +322,15 @@
       <p>Beberapa contoh hasil cetak dan reklame yang telah kami kerjakan.</p>
     </div>
 
-    <div class="gallery-grid">
-      <figure class="gallery-item img-slot reveal"><img src="assets/images/galeri/galeri-01.png" alt="Hasil cetak kartu nama ADAM XII PRINTING" width="400" height="400" loading="lazy"></figure>
-      <figure class="gallery-item img-slot reveal"><img src="assets/images/galeri/galeri-02.png" alt="Hasil cetak brosur dan flyer" width="400" height="400" loading="lazy"></figure>
-      <figure class="gallery-item img-slot reveal"><img src="assets/images/galeri/galeri-03.png" alt="Hasil cetak banner dan backdrop" width="400" height="400" loading="lazy"></figure>
-      <figure class="gallery-item img-slot reveal"><img src="assets/images/galeri/galeri-04.png" alt="Hasil cetak stiker gulungan" width="400" height="400" loading="lazy"></figure>
-      <figure class="gallery-item img-slot reveal"><img src="assets/images/galeri/galeri-05.png" alt="Neonbox bulat ADAM XII PRINTING" width="400" height="400" loading="lazy"></figure>
-      <figure class="gallery-item img-slot reveal"><img src="assets/images/galeri/galeri-06.png" alt="Huruf timbul warna oranye" width="400" height="400" loading="lazy"></figure>
+    <!-- Cuplikan: album yang diberi featured: true di js/gallery-data.js -->
+    <div class="album-grid" data-gallery data-featured="true" data-base=""></div>
+    <noscript><p class="muted">Aktifkan JavaScript untuk melihat album, atau buka <a href="galeri/">halaman galeri</a>.</p></noscript>
+
+    <div class="section-more">
+      <a class="btn btn-outline" href="galeri/">
+        Lihat Semua Galeri
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
   </div>
 </section>
@@ -335,7 +342,7 @@
       <h2>Butuh Konsultasi atau <span class="accent">Penawaran Harga?</span></h2>
       <p>Hubungi kami sekarang, tim kami siap membantu Anda.</p>
     </div>
-    <a class="btn btn-primary btn-cta-big" data-wa href="https://wa.me/6281234567890">
+    <a class="btn btn-primary btn-cta-big" data-wa href="https://wa.me/6281293419534">
       Hubungi Kami Sekarang
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </a>
@@ -362,6 +369,8 @@
 </footer>
 
 <script src="js/config.js"></script>
+<script src="js/gallery-data.js"></script>
 <script src="js/main.js" defer></script>
+<script src="js/gallery.js" defer></script>
 </body>
 </html>

@@ -4,10 +4,12 @@
   "name": "ADAM XII PRINTING",
   "description": "Percetakan dan reklame di Sorong untuk kebutuhan personal, instansi, UMKM, dan perusahaan.",
   "url": "https://example.com/",
+  "telephone": "+6281293419534",
   "logo": "https://example.com/assets/images/brand/logo.png",
   "image": "https://example.com/assets/images/og/og-cover.jpg",
   "address": {
     "@type": "PostalAddress",
+    "streetAddress": "Jl. Basuki Rahmat KM 11 - Depan Poltekes",
     "addressLocality": "Sorong",
     "addressRegion": "Papua Barat Daya",
     "addressCountry": "ID"

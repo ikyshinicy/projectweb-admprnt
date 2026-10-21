@@ -15,21 +15,42 @@
     "_catatan": "false = situs dikunci dari Google (noindex) selama masih pengembangan. Ubah ke true saat resmi online."
   },
 
-  "page": {
-    "path": "/",
-    "title": "ADAM XII PRINTING — Percetakan & Reklame di Sorong",
-    "description": "Percetakan & reklame di Sorong: kartu nama, brosur, banner, stempel, stiker, huruf timbul, neonbox, dan souvenir. Hasil berkualitas, harga terjangkau.",
-    "keywords": [
-      "percetakan Sorong",
-      "reklame Sorong",
-      "cetak banner Sorong",
-      "cetak kartu nama Sorong",
-      "stempel Sorong",
-      "neonbox Sorong",
-      "huruf timbul Sorong",
-      "cetak stiker Sorong"
-    ]
-  },
+  "pages": [
+    {
+      "_catatan": "Satu blok per halaman. file = lokasi HTML, path = alamat di situs. schema: business (beranda) atau gallery.",
+      "file": "index.html",
+      "path": "/",
+      "schema": "business",
+      "priority": "1.0",
+      "title": "ADAM XII PRINTING — Percetakan & Reklame di Sorong",
+      "description": "Percetakan & reklame di Sorong: kartu nama, brosur, banner, stempel, stiker, huruf timbul, neonbox, dan souvenir. Hasil berkualitas, harga terjangkau.",
+      "keywords": [
+        "percetakan Sorong",
+        "reklame Sorong",
+        "cetak banner Sorong",
+        "cetak kartu nama Sorong",
+        "stempel Sorong",
+        "neonbox Sorong",
+        "huruf timbul Sorong",
+        "cetak stiker Sorong"
+      ]
+    },
+    {
+      "file": "galeri/index.html",
+      "path": "/galeri/",
+      "schema": "gallery",
+      "priority": "0.8",
+      "title": "Galeri Hasil Cetak & Reklame | ADAM XII PRINTING",
+      "description": "Lihat hasil kerja ADAM XII PRINTING Sorong: kartu nama, banner, stiker, neonbox, huruf timbul, stempel, dan souvenir custom.",
+      "keywords": [
+        "galeri percetakan Sorong",
+        "contoh hasil cetak Sorong",
+        "contoh neonbox Sorong",
+        "contoh huruf timbul Sorong",
+        "hasil cetak banner Sorong"
+      ]
+    }
+  ],
 
   "social": {
     "ogImage": "/assets/images/og/og-cover.jpg",
@@ -54,13 +75,13 @@
     "type": "PrintShop",
     "name": "ADAM XII PRINTING",
     "description": "Percetakan dan reklame di Sorong untuk kebutuhan personal, instansi, UMKM, dan perusahaan.",
-    "telephone": "",
+    "telephone": "+6281293419534",
     "email": "",
     "priceRange": "",
     "logo": "/assets/images/brand/logo.png",
     "image": "/assets/images/og/og-cover.jpg",
     "address": {
-      "streetAddress": "",
+      "streetAddress": "Jl. Basuki Rahmat KM 11 - Depan Poltekes",
       "addressLocality": "Sorong",
       "addressRegion": "Papua Barat Daya",
       "postalCode": "",

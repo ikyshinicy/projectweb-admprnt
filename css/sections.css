@@ -80,11 +80,8 @@
 .step h3 { margin: 4px 0 4px; }
 .step p { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
 
-/* ---------- Galeri ---------- */
-.gallery-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-.gallery-item { height: 176px; border-radius: 20px; position: relative; box-shadow: var(--shadow-card); }
-.gallery-item img { transition: transform .4s; }
-.gallery-item:hover img { transform: scale(1.06); }
+/* ---------- Galeri (kartu album ada di css/gallery.css) ---------- */
+.section-more { display: flex; justify-content: center; margin-top: 36px; }
 
 /* ---------- CTA ---------- */
 .final-cta {
