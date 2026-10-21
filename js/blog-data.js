@@ -41,8 +41,8 @@ window.BLOG_CATEGORIES = [
 ];
 
 window.BLOG_VIDEOS = [
-  { title: "Festival Pesona Raja Ampat 2026", category: "event-organizer",      url: "https://www.youtube.com/watch?v=K6zenWpcqUk", desc: "Festival Pesona Raja Ampat 2026: Ajang Promosi Wisata Bahari & Pelestarian Budaya" },
-  { title: "Festival Pesona Raja Ampat & Gemarikan 2025", category: "event-organizer",         url: "https://www.youtube.com/watch?v=ybjKaySWN_A", desc: "Festival Pesona Raja Ampat & Gemarikan 2025 hadir sebagai wujud kolaborasi budaya, pariwisata, dan edukasi gizi masyarakat. Melalui pertunjukan seni, kuliner lokal, dan kampanye makan ikan, festival ini mengangkat potensi Raja Ampat sebagai destinasi unggulan dan pusat ketahanan pangan laut.
+  { title: "Festival Pesona Raja Ampat 2026", category: "event-organizer", url: "https://www.youtube.com/watch?v=K6zenWpcqUk", desc: "Festival Pesona Raja Ampat 2026: Ajang Promosi Wisata Bahari & Pelestarian Budaya" },
+  { title: "Festival Pesona Raja Ampat & Gemarikan 2025", category: "event-organizer", url: "https://www.youtube.com/watch?v=ybjKaySWN_A", desc: "Festival Pesona Raja Ampat & Gemarikan 2025 hadir sebagai wujud kolaborasi budaya, pariwisata, dan edukasi gizi masyarakat. Melalui pertunjukan seni, kuliner lokal, dan kampanye makan ikan, festival ini mengangkat potensi Raja Ampat sebagai destinasi unggulan dan pusat ketahanan pangan laut.
 " },
   { title: "Judul Video 3", category: "event-organizer", url: "", desc: "Keterangan singkat video tampil di sini." }
 
