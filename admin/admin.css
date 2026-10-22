@@ -57,6 +57,48 @@
 .accent-preview{margin-top:8px;padding:9px 12px;border:1px dashed #cdd5dd;border-radius:10px;background:#fafbfc;font-size:13px;color:var(--muted)}
 .accent-preview strong{color:var(--ink);font-size:15px}
 .accent-preview mark{background:var(--lime);color:var(--navy);border-radius:5px;padding:1px 6px}
+/* ===== Perapihan area konten ===== */
+[hidden]{display:none!important}
+.content>*:not(.publish-bar){max-width:1040px}
+.page-head{margin:0 0 14px}
+.page-head h1{margin:0;font-size:26px;letter-spacing:-.02em;line-height:1.15}
+.page-head p{margin:4px 0 0;font-size:14px}
+.message:empty{display:none}
+.global-message{margin:0 0 10px}
+.subtabs{display:inline-flex;gap:4px;padding:4px;background:#e8ecf0;border-radius:12px;margin:2px 0 16px}
+.subtab{display:flex;align-items:center;gap:8px;border:0;background:transparent;border-radius:9px;padding:8px 14px;font-weight:700;color:#4b5766}
+.subtab:hover{background:#ffffff80}
+.subtab.active{background:#fff;color:var(--ink);box-shadow:0 1px 3px #17202b1f}
+.subtab .count{min-width:22px;text-align:center;font-size:12px;font-weight:800;border-radius:99px;padding:1px 7px;background:#dde3ea;color:#4b5766}
+.subtab.active .count{background:var(--lime);color:var(--navy)}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 14px;padding:0;border:0}
+.section-text h2{margin:0;font-size:18px;letter-spacing:-.01em}
+.section-text p{margin:3px 0 0;font-size:13px;color:var(--muted);max-width:620px}
+.section-tools{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.list-search{width:210px;padding:9px 12px;border:1px solid #d8dee6;border-radius:10px;background:#fff}
+.entity-card.open{border-color:#cfd6df;box-shadow:0 4px 18px #17202b0d}
+.nested-item.open{border-color:#cfd6df}
+.field-grid{align-items:start;gap:14px 16px}
+.field{align-content:start}
+.field>label{font-size:13px}
+.label-hint{font-weight:500;color:var(--muted);margin-left:8px;font-size:11.5px}
+.field input:not([type=checkbox]):not([type=file]),.field select,.field textarea{padding:10px 12px}
+.field textarea{min-height:0;resize:vertical}
+.image-field{display:flex;gap:14px;align-items:flex-start}
+.image-thumb{flex:0 0 132px;height:92px;border:1px solid var(--line);border-radius:10px;background:#f1f4f7;display:grid;place-items:center;overflow:hidden}
+.image-thumb img,.image-preview{width:100%;height:100%;max-height:none;object-fit:cover;border-radius:0;border:0;margin:0;display:block}
+.no-image{font-size:12px;color:var(--muted);text-align:center;padding:6px}
+.image-col{flex:1;min-width:0;display:grid;gap:8px}
+.upload-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.upload-btn{display:inline-block;cursor:pointer;border:1px solid #cdd5dd;background:#fff;border-radius:9px;padding:8px 12px;font-weight:700;font-size:13px;white-space:nowrap}
+.upload-btn:hover{background:#f3f6f8;border-color:#9dbb36}
+.upload-row .progress{font-size:12px;color:var(--muted)}
+.sublist{margin-top:20px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#f8fafb}
+.sublist-head{margin:0 0 4px}
+.sublist.open .sublist-head{margin-bottom:10px}
+.nested-item{background:#fff}
+.empty{padding:20px;text-align:center;color:var(--muted);border:1px dashed #cfd6df;border-radius:12px;background:#fff}
+.dirty-banner{max-width:1040px}
 @media(max-width:900px){
   .app{grid-template-columns:1fr}
   .sidebar{position:static;height:auto;flex-direction:column;gap:12px;padding:14px 12px}
@@ -79,4 +121,9 @@
   .acc-title.big{font-size:17px}
   .section-head{flex-direction:column;align-items:stretch}
   .accent-row{grid-template-columns:1fr}
+  .section-head{flex-direction:column;align-items:stretch}
+  .section-tools{flex-wrap:wrap}
+  .list-search{flex:1;width:auto}
+  .image-field{flex-direction:column}
+  .image-thumb{flex-basis:auto;width:100%;height:140px}
 }
