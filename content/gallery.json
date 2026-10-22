@@ -402,6 +402,13 @@
           "alt": "Dokumentasi foto acara instansi"
         }
       ]
+    },
+    {
+      "id": "album-baru",
+      "title": "Album baru",
+      "category": "kartu-nama",
+      "featured": false,
+      "items": []
     }
   ]
 }
