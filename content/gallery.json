@@ -176,18 +176,18 @@
       "items": [
         {
           "type": "photo",
-          "src": "assets/images/galeri/neonbox-01/1.webp",
-          "alt": "Neonbox bulat outdoor menyala"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/neonbox-toko-1.webp",
+          "alt": "Neonbox Persegi Panjang outdoor "
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/neonbox-01/2.webp",
-          "alt": "Neonbox tampak siang hari"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/neonbox-toko-2.webp",
+          "alt": "Neonbox Bulat"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/neonbox-01/3.webp",
-          "alt": "Neonbox saat malam"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/neonbox-toko-3.webp",
+          "alt": "Neonbox Oval"
         },
         {
           "type": "photo",
