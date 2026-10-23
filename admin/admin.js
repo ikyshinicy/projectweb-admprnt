@@ -2,7 +2,7 @@
 (() => {
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
-  const state = { content: null, baseSha: '', dirty: false, busy: false, activeTab: 'layanan', open: new Set(), closedSections: new Set(), sub: { blog: 'videos', galeri: 'albums' }, query: {} };
+  const state = { content: null, baseSha: '', dirty: false, busy: false, activeTab: 'layanan', open: new Set(), closedSections: new Set(), sub: { blog: 'videos', galeri: 'albums' }, query: {}, edit: null, uploadNote: {} };
   const PATHS = { layanan: 'content/layanan.json', blog: 'content/blog.json', galeri: 'content/gallery.json', kontak: 'content/site.json' };
   const ICONS = ['copy','idcard','banner','billboard','card','brochure','stamp','sticker','book','mug','letters','neon','signboard','bulb','car','build','clipboard','stage','sound','tent','mic','camera','food','users','heart','printer','calendar','cube'];
   const ICON_GLYPHS = {copy:'▣',idcard:'▤',banner:'▰',billboard:'▱',card:'▭',brochure:'▥',stamp:'▣',sticker:'◇',book:'▤',mug:'☕',letters:'Aa',neon:'▣',signboard:'▰',bulb:'◉',car:'▰',build:'⚒',clipboard:'▤',stage:'▱',sound:'♫',tent:'⌂',mic:'♩',camera:'◎',food:'♨',users:'♙',heart:'♡',printer:'▣',calendar:'▦',cube:'◇'};
@@ -81,7 +81,7 @@
   }
   function fieldLabel(key) { return LABELS[key] || key.replace(/([A-Z])/g,' $1').replace(/^./, c => c.toUpperCase()); }
   function fieldNode(key, value, path, obj) {
-    const wrap = el('div', `field${['lead','sectionLead','ctaLead','sectionTitle','whatsappMessage','address','desc','excerpt','icon','image','thumb','cover','src','url'].includes(key) ? ' full-width' : ''}`);
+    const wrap = el('div', `field${['lead','sectionLead','ctaLead','sectionTitle','whatsappMessage','address','desc','excerpt','icon','image','thumb','cover','src','url','tagline'].includes(key) ? ' full-width' : ''}`);
     const label = el('label', '', fieldLabel(key)); wrap.append(label);
     if (key === 'items' || key === 'categories' || key === 'videos' || key === 'articles' || key === 'groups' || key === 'albums') return null;
     if (key === 'icon') {
@@ -102,14 +102,17 @@
       const line = el('label','inline-check'); const input = el('input'); input.type='checkbox'; input.checked=value; input.dataset.path=path; input.dataset.fieldInput='true'; line.append(input, document.createTextNode(value ? 'Ya, tampilkan sebagai unggulan' : 'Tidak')); wrap.append(line); return wrap;
     }
     if (['image','thumb','cover','src'].includes(key)) {
-      const holder = el('div','image-field'); const thumb = el('div','image-thumb');
-      if (value) { const img=el('img','image-preview'); img.src=value; img.alt=fieldLabel(key); img.loading='lazy'; img.onerror=()=>{img.remove(); thumb.append(el('span','no-image','Gambar tidak terbaca'));}; thumb.append(img); } else thumb.append(el('span','no-image','Belum ada gambar'));
-      const col = el('div','image-col');
-      const input = el('input'); input.type='url'; input.value=value || ''; input.placeholder=PLACEHOLDERS[key] || 'https://…'; input.dataset.path=path; input.dataset.fieldInput='true'; col.append(input);
-      const row=el('div','upload-row'); const file=el('input'); file.type='file'; file.accept='image/png,image/jpeg,image/webp'; file.dataset.uploadPath=path; file.dataset.uploadFolder=key==='image'?'layanan':(key==='src'||key==='cover'?'galeri':'blog'); file.style.display='none';
-      const pick=el('label','upload-btn'); pick.append(document.createTextNode('📤 Pilih gambar & unggah'), file); row.append(pick);
-      const help=el('small','progress','Otomatis diperkecil dan diubah ke WebP, lalu disimpan di Cloudflare R2.'); row.append(help); col.append(row);
-      holder.append(thumb, col); wrap.append(holder); return wrap;
+      const holder = el('div','image-field'); const u = imgUrl(value);
+      if (u) { const img = el('img','image-preview'); img.src = u; img.alt = fieldLabel(key); img.loading = 'lazy'; img.onerror = () => { img.remove(); }; holder.append(img); }
+      const folder = key === 'image' ? 'layanan' : (key === 'src' || key === 'cover' ? 'galeri' : 'blog');
+      const zone = el('label','dropzone'); zone.dataset.dropPath = path; zone.dataset.dropFolder = folder;
+      const file = el('input'); file.type = 'file'; file.accept = 'image/png,image/jpeg,image/webp'; file.dataset.uploadPath = path; file.dataset.uploadFolder = folder; file.style.display = 'none';
+      const text = el('span','dz-text'); text.append(el('strong','','Klik pilih'), document.createTextNode(' atau drag & drop'));
+      zone.append(el('span','dz-icon','🖼️'), text, file); holder.append(zone);
+      holder.append(el('small','progress', state.uploadNote[path] || (value ? '✓ Sudah ada gambar' : 'Belum ada gambar · otomatis diubah ke WebP dan disimpan di Cloudflare R2')));
+      holder.append(el('label','sub-label','Atau isi URL manual'));
+      const input = el('input'); input.type = 'url'; input.value = value || ''; input.placeholder = PLACEHOLDERS[key] || 'https://…'; input.dataset.path = path; input.dataset.fieldInput = 'true'; holder.append(input);
+      wrap.append(holder); return wrap;
     }
     const options = optionsFor(key, path); let input;
     if (options) { input=el('select'); options.forEach(opt=>{const o=el('option','',opt.label);o.value=opt.value;input.append(o);}); if (value && !options.some(o=>o.value===value)) { const o=el('option','',`Nilai lama: ${value}`);o.value=value;input.prepend(o); } input.value=value || (options[0] ? options[0].value : ''); }
@@ -129,6 +132,10 @@
     });
     return grid;
   }
+  function imgUrl(v) { v = String(v || '').trim(); if (!v) return ''; return /^(https?:)?\/\/|^\/|^data:/.test(v) ? v : '/' + v; }
+  function thumbOf(obj) { return imgUrl(obj.thumb || obj.image || obj.cover || (Array.isArray(obj.items) && obj.items[0] && obj.items[0].src) || obj.src || ''); }
+  function titleOf(obj, config, index) { return obj.title || obj.label || obj.id || obj.alt || `${config.singular} ${index + 1}`; }
+  function snippetOf(obj) { const s = String(obj.desc || obj.excerpt || obj.lead || obj.tagline || obj.alt || (Array.isArray(obj.items) && obj.items[0] && obj.items[0].alt) || obj.url || obj.source || '').replace(/\s+/g, ' ').trim(); return s.length > 90 ? s.slice(0, 90) + '…' : s; }
   function metaFor(obj) {
     const parts = [];
     for (const k of Object.keys(obj)) if (Array.isArray(obj[k])) parts.push(`${obj[k].length} ${k === 'items' ? 'item' : k}`);
@@ -138,48 +145,36 @@
     if (obj.group) parts.push(obj.group);
     return parts.join(' · ');
   }
-  function itemActions(path, index, len, title) {
-    const actions = el('div','entity-actions');
-    if (index > 0) { const b = button('↑','mini-button','move-up','Pindah ke atas'); b.dataset.path = path; b.dataset.index = index; actions.append(b); }
-    if (index < len - 1) { const b = button('↓','mini-button','move-down','Pindah ke bawah'); b.dataset.path = path; b.dataset.index = index; actions.append(b); }
+  function arrayParent(arrPath) { const p = splitPath(arrPath); return p.length >= 4 ? p.slice(0, 3).join('.') : null; }
+  function thumbNode(obj, title) {
+    const box = el('div','row-thumb'); const u = thumbOf(obj);
+    const glyph = obj.icon ? (ICON_GLYPHS[obj.icon] || '◇') : ((obj.type === 'video' || /youtu|instagram|tiktok|facebook|fb\.watch/.test(obj.url || '')) ? '▶' : (String(title).trim()[0] || '•').toUpperCase());
+    if (u) { const img = el('img'); img.src = u; img.alt = ''; img.loading = 'lazy'; img.onerror = () => { img.remove(); box.append(el('span','row-glyph',glyph)); }; box.append(img); }
+    else box.append(el('span','row-glyph',glyph));
+    return box;
+  }
+  function listRow(path, index, len, obj, config) {
+    const ipath = `${path}.${index}`; const title = titleOf(obj, config, index); const meta = metaFor(obj); const snip = snippetOf(obj);
+    const row = el('div','list-row'); row.dataset.search = `${title} ${meta} ${snip}`.toLowerCase();
+    const main = button('','row-main','edit'); main.dataset.path = ipath; main.append(thumbNode(obj, title), el('span','row-title',title));
+    row.append(main, el('span','row-info',meta), el('span','row-snippet',snip));
+    const actions = el('div','row-actions');
+    if (index > 0) { const b = button('↑','icon-btn','move-up','Pindah ke atas'); b.dataset.path = path; b.dataset.index = index; actions.append(b); }
+    if (index < len - 1) { const b = button('↓','icon-btn','move-down','Pindah ke bawah'); b.dataset.path = path; b.dataset.index = index; actions.append(b); }
+    const e = button('Edit','mini-button','edit'); e.dataset.path = ipath; actions.append(e);
     const d = button('Hapus','mini-button danger','delete-item'); d.dataset.path = path; d.dataset.index = index; d.dataset.title = title; actions.append(d);
-    return actions;
+    row.append(actions); return row;
   }
-  // Satu kartu dropdown: judul + ringkasan selalu terlihat, isi baru dibuat saat dibuka.
-  function accordion(key, cls, title, meta, actions, build) {
-    const open = state.open.has(key);
-    const card = el('article', `${cls}${open ? ' open' : ''}`); card.dataset.search = `${title} ${meta || ''}`.toLowerCase();
-    const head = el('div','acc-head');
-    const toggle = button('','acc-toggle','toggle'); toggle.dataset.key = key; toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    const info = el('span','acc-info'); info.append(el('span','acc-title',title)); if (meta) info.append(el('span','acc-meta',meta));
-    toggle.append(el('span','chev','▸'), info);
-    head.append(toggle); if (actions) head.append(actions);
-    card.append(head);
-    if (open) { const body = el('div','acc-body'); build(body); card.append(body); }
-    return card;
-  }
-  function buildEntityBody(body, obj, path) {
-    body.append(renderObject(obj, path));
-    Object.keys(obj).filter(k => Array.isArray(obj[k])).forEach(childKey => body.append(renderArray(obj[childKey], `${path}.${childKey}`, childKey)));
-  }
-  function renderArray(arr, path, key) {
-    const config = sectionConfig(key, path); const lkey = 'list:' + path; const open = state.open.has(lkey);
-    const wrap = el('div', `sublist${open ? ' open' : ''}`); const head = el('div','sublist-head');
-    const t = button('','acc-toggle sub','toggle'); t.dataset.key = lkey; t.setAttribute('aria-expanded', open ? 'true' : 'false');
-    t.append(el('span','chev','▸'), el('span','acc-title',`${config.title} (${arr.length})`));
-    const add = button(`+ Tambah ${config.singular}`,'mini-button','add-item'); add.dataset.path = path; add.dataset.key = key;
-    head.append(t, add); wrap.append(head);
-    if (!open) return wrap;
-    if (!arr.length) wrap.append(el('div','empty',`Belum ada ${config.singular}. Gunakan tombol tambah untuk membuat.`));
-    arr.forEach((obj, index) => {
-      const ipath = `${path}.${index}`; const title = obj.title || obj.label || obj.id || obj.alt || `${config.singular} ${index + 1}`;
-      wrap.append(accordion(ipath, 'nested-item', title, metaFor(obj), itemActions(path, index, arr.length, title), body => buildEntityBody(body, obj, ipath)));
-    });
-    return wrap;
+  function renderList(arr, path, key, compact) {
+    const config = sectionConfig(key, path); const list = el('div', `list${compact ? ' compact' : ''}`);
+    const head = el('div','list-head'); ['Judul','Info','Ringkasan','Aksi'].forEach(t => head.append(el('span','',t))); list.append(head);
+    if (!arr.length) list.append(el('div','empty',`Belum ada ${config.singular}. Gunakan tombol tambah untuk membuat.`));
+    arr.forEach((obj, index) => list.append(listRow(path, index, arr.length, obj, config)));
+    return list;
   }
   function applyFilter(section, query) {
     const q = String(query || '').trim().toLowerCase(); let shown = 0;
-    section.querySelectorAll(':scope > .stack > .entity-card').forEach(card => { const ok = !q || card.dataset.search.includes(q); card.hidden = !ok; if (ok) shown++; });
+    section.querySelectorAll('.list-row').forEach(row => { const ok = !q || row.dataset.search.includes(q); row.hidden = !ok; if (ok) shown++; });
     const note = section.querySelector('.no-result'); if (note) note.hidden = !(q && shown === 0);
   }
   function renderEntityArray(path, key, title, description) {
@@ -190,23 +185,49 @@
     if (arr.length > 5) { const s = el('input','list-search'); s.type = 'search'; s.placeholder = `Cari ${config.singular}…`; s.value = state.query[path] || ''; s.dataset.searchPath = path; tools.append(s); }
     const add = button(`+ Tambah ${config.singular}`,'button primary','add-item'); add.dataset.path = path; add.dataset.key = key; tools.append(add);
     head.append(texts, tools); section.append(head);
-    if (!arr.length) section.append(el('div','empty','Belum ada data. Tambahkan item untuk mulai mengelola bagian ini.'));
-    const stack = el('div','stack');
-    arr.forEach((obj, index) => {
-      const cpath = `${path}.${index}`; const name = obj.title || obj.label || obj.id || obj.alt || `${config.singular} ${index + 1}`;
-      stack.append(accordion(cpath, 'entity-card', name, metaFor(obj), itemActions(path, index, arr.length, name), body => buildEntityBody(body, obj, cpath)));
-    });
-    section.append(stack);
+    section.append(renderList(arr, path, key, false));
     const none = el('div','empty no-result','Tidak ada yang cocok dengan pencarian.'); none.hidden = true; section.append(none);
     applyFilter(section, state.query[path]);
     return section;
   }
-  // Satu tab bisa punya beberapa bagian; hanya satu ditampilkan, dipilih lewat sub-tab.
   function renderSections(tabKey, defs) {
     const wrap = el('div','sections'); const cur = defs.some(d => d.id === state.sub[tabKey]) ? state.sub[tabKey] : defs[0].id;
     const nav = el('div','subtabs');
     defs.forEach(d => { const b = button('', `subtab${d.id === cur ? ' active' : ''}`, 'subtab'); b.dataset.tab = tabKey; b.dataset.sub = d.id; b.append(document.createTextNode(d.label), el('span','count',String(pathGet(d.path).length))); nav.append(b); });
     wrap.append(nav); const d = defs.find(x => x.id === cur); wrap.append(renderEntityArray(d.path, d.key, d.title, d.desc)); return wrap;
+  }
+  // Daftar anak (mis. foto di dalam album, item di dalam kategori) ditampilkan di dalam popup.
+  function renderChildList(arr, path, key) {
+    const config = sectionConfig(key, path); const box = el('div','child-block'); const head = el('div','child-head');
+    head.append(el('h3','',`${config.title} (${arr.length})`));
+    const add = button(`+ Tambah ${config.singular}`,'button secondary','add-item'); add.dataset.path = path; add.dataset.key = key; head.append(add);
+    box.append(head, renderList(arr, path, key, true)); return box;
+  }
+  function closeModal() { state.edit = null; render(); }
+  function renderModal() {
+    const root = $('#modal-root'); const prev = root.querySelector('.modal-body'); const sameScroll = prev && root.dataset.path === state.edit; const sc = sameScroll ? prev.scrollTop : 0;
+    root.replaceChildren(); document.body.classList.toggle('modal-open', !!state.edit); root.dataset.path = state.edit || '';
+    if (!state.edit) return;
+    let obj; try { obj = pathGet(state.edit); } catch (_) {}
+    if (!obj) { state.edit = null; document.body.classList.remove('modal-open'); return; }
+    const parts = splitPath(state.edit); const arrKey = parts[parts.length - 2]; const arrPath = parts.slice(0, -1).join('.'); const index = Number(parts[parts.length - 1]);
+    const config = sectionConfig(arrKey, arrPath); const parent = arrayParent(arrPath);
+    const overlay = el('div','modal-overlay'); const dlg = el('div','modal'); dlg.setAttribute('role','dialog'); dlg.setAttribute('aria-modal','true');
+    const head = el('div','modal-head'); const left = el('div','modal-title');
+    if (parent) { const back = button('‹ Kembali','mini-button','edit'); back.dataset.path = parent; left.append(back); }
+    const tt = el('div'); tt.append(el('strong','',`Edit ${config.singular}`), el('span','modal-sub',titleOf(obj, config, index))); left.append(tt);
+    const x = button('×','icon-btn close','close-modal','Tutup'); head.append(left, x);
+    const body = el('div','modal-body'); body.append(renderObject(obj, state.edit));
+    Object.keys(obj).filter(k => Array.isArray(obj[k])).forEach(k => body.append(renderChildList(obj[k], `${state.edit}.${k}`, k)));
+    const foot = el('div','modal-foot');
+    const del = button('Hapus ' + config.singular,'mini-button danger','delete-item'); del.dataset.path = arrPath; del.dataset.index = index; del.dataset.title = titleOf(obj, config, index);
+    const done = parent ? button('Selesai','button primary','edit') : button('Selesai','button primary','close-modal'); if (parent) done.dataset.path = parent;
+    const hint = el('span','modal-hint','Perubahan langsung tercatat. Klik “Terbitkan perubahan” untuk memasang ke situs.');
+    foot.append(del, hint, done);
+    dlg.append(head, body, foot); overlay.append(dlg); root.append(overlay); body.scrollTop = sc;
+  }
+  function showToast(text, type = 'success') {
+    const t = el('div', `toast ${type}`, text); document.body.append(t); setTimeout(() => t.remove(), 4200);
   }
   function renderLayanan() {
     return renderEntityArray('content/layanan.json.categories', 'categories', 'Kategori layanan', 'Halaman Percetakan, Reklame, Event Organizer, dan item layanan di dalamnya.');
@@ -218,7 +239,7 @@
   function render() {
     const pg = PAGE[state.activeTab] || PAGE.layanan; $('#page-title').textContent = pg[0]; $('#page-sub').textContent = pg[1];
     $('#section-layanan').replaceChildren(renderLayanan());$('#section-blog').replaceChildren(renderBlog());$('#section-galeri').replaceChildren(renderGaleri());$('#section-kontak').replaceChildren(renderKontak());
-    $$('.tab').forEach(tab=>tab.classList.toggle('active',tab.dataset.tab===state.activeTab));['layanan','blog','galeri','kontak'].forEach(key=>$('#section-'+key).hidden=key!==state.activeTab);
+    $$('.tab').forEach(tab=>tab.classList.toggle('active',tab.dataset.tab===state.activeTab));['layanan','blog','galeri','kontak'].forEach(key=>$('#section-'+key).hidden=key!==state.activeTab);renderModal();
   }
   function addDefault(path,key) {
     const arr=pathGet(path);const config=sectionConfig(key, path);const item=clone(config.defaults);
@@ -226,7 +247,7 @@
     if(key==='categories' && path.includes('gallery.json') && state.content['content/gallery.json'].groups.length) item.group=state.content['content/gallery.json'].groups[0].id;
     if(key==='categories' && path.includes('blog.json') && state.content['content/blog.json'].categories.some(x=>x.id===item.id)) item.id='kategori-baru-'+(arr.length+1);
     if(key==='categories' && path.includes('layanan.json') && state.content['content/layanan.json'].categories.some(x=>x.id===item.id)) {item.id='layanan-baru-'+(arr.length+1);item.slug=item.id;}
-    arr.push(item);state.open.add(`${path}.${arr.length - 1}`);state.open.add('list:' + path);state.closedSections.delete('sec:' + path);dirty();render();
+    arr.push(item);state.edit=`${path}.${arr.length - 1}`;dirty();render();
   }
   function detectPlatform(url) { try {const u=new URL(url);const h=u.hostname.replace(/^www\./,'').toLowerCase();if(h==='youtube.com'||h==='youtu.be'||h.endsWith('.youtube.com'))return 'YouTube';if(h==='instagram.com'||h.endsWith('.instagram.com'))return 'Instagram';if(h==='tiktok.com'||h.endsWith('.tiktok.com'))return 'TikTok';if(h==='facebook.com'||h.endsWith('.facebook.com')||h==='fb.watch')return 'Facebook';return 'tidak didukung';}catch(_){return 'tautan belum valid';} }
   function validateBeforePublish() {
@@ -267,8 +288,8 @@
     return fallback;
   }
   async function uploadImage(file,path,folder,input) {
-    if(!file)return;const progress=input.parentElement.parentElement.querySelector('.progress');if(progress)progress.textContent='Menyiapkan gambar…';
-    try { const bitmap=await createImageBitmap(file);const scale=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',0.82));if(!blob)throw new Error('Browser tidak bisa mengubah gambar ke WebP.');if(blob.size>2*1024*1024)throw new Error('Ukuran gambar setelah diperkecil masih lebih dari 2 MB. Pilih gambar yang lebih kecil.');const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Gambar gagal dibaca.'));reader.readAsDataURL(blob);});if(progress)progress.textContent='Mengunggah gambar…';const result=await api('/api/upload',{method:'POST',body:JSON.stringify({...uploadTarget(path,folder),mimeType:'image/webp',data})});pathSet(path,result.url);dirty();render();setMessage($('#global-message'), 'Gambar berhasil diunggah dan tautannya sudah dimasukkan.','success');}catch(error){if(progress)progress.textContent='';setMessage($('#global-message'),error.message,'error');}finally{input.value='';}
+    if(!file)return;const progress=input.closest('.image-field')?input.closest('.image-field').querySelector('.progress'):null;if(progress)progress.textContent='Menyiapkan gambar…';
+    try { const bitmap=await createImageBitmap(file);const scale=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',0.82));if(!blob)throw new Error('Browser tidak bisa mengubah gambar ke WebP.');if(blob.size>2*1024*1024)throw new Error('Ukuran gambar setelah diperkecil masih lebih dari 2 MB. Pilih gambar yang lebih kecil.');const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Gambar gagal dibaca.'));reader.readAsDataURL(blob);});if(progress)progress.textContent='Mengunggah gambar…';const result=await api('/api/upload',{method:'POST',body:JSON.stringify({...uploadTarget(path,folder),mimeType:'image/webp',data})});pathSet(path,result.url);state.uploadNote[path]='✓ Berhasil diunggah sebagai WebP';dirty();render();showToast('Gambar berhasil diunggah dan tautannya sudah dimasukkan.','success');}catch(error){if(progress)progress.textContent='';showToast(error.message,'error');}finally{input.value='';}
   }
   async function loadContent() { $('#reload-button').disabled=true;setMessage($('#global-message'),'Memuat konten dari GitHub…');try{const result=await api('/api/content');state.content=result.content;state.baseSha=result.baseSha;state.dirty=false;$('#dirty-banner').hidden=true;$('#publish-button').disabled=true;$('#publish-status').textContent='Belum ada perubahan';$('#publish-detail').textContent='Konten akan diperiksa sebelum dikirim ke GitHub.';$('#connection-state').textContent='Sesi aktif';render();setMessage($('#global-message'),'Konten berhasil dimuat.','success');}catch(error){setMessage($('#global-message'),error.message,'error');if(error.status===401){showApp(false);}}finally{$('#reload-button').disabled=false;} }
   async function login(event) {event.preventDefault();const input=$('#password');const message=$('#login-message');setMessage(message,'Memeriksa kata sandi…');try{await api('/api/login',{method:'POST',body:JSON.stringify({password:input.value})});input.value='';showApp(true);await loadContent();}catch(error){setMessage(message,error.message,'error');}}
@@ -277,10 +298,17 @@
   document.addEventListener('input',event=>{const target=event.target;if(target.dataset.fieldInput==='true'){const old=pathGet(target.dataset.path);pathSet(target.dataset.path,target.type==='checkbox'?target.checked:target.value);if(old!==target.value||target.type==='checkbox')dirty();const note=$(`[data-platform-for="${CSS.escape(target.dataset.path)}"]`);if(note)note.textContent=`Platform terdeteksi: ${detectPlatform(target.value)}`;}});
   document.addEventListener('input',event=>{const s=event.target;if(s.dataset&&s.dataset.searchPath!==undefined){state.query[s.dataset.searchPath]=s.value;applyFilter(s.closest('.entity-section'),s.value);return;}});
   document.addEventListener('input',event=>{const target=event.target;if(!target.dataset||!target.dataset.accentPart)return;const wrap=target.closest('.accent-field');const [i1,i2]=wrap.querySelectorAll('input');pathSet(wrap.dataset.path,composeAccent(i1.value,i2.value,wrap.dataset.after));updateAccentPreview(wrap);dirty();});
+  document.addEventListener('click',event=>{if(event.target.classList&&event.target.classList.contains('modal-overlay'))closeModal();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.edit)closeModal();});
+  document.addEventListener('dragover',event=>{event.preventDefault();const z=event.target.closest&&event.target.closest('.dropzone');if(z)z.classList.add('drag');});
+  document.addEventListener('dragleave',event=>{const z=event.target.closest&&event.target.closest('.dropzone');if(z&&!z.contains(event.relatedTarget))z.classList.remove('drag');});
+  document.addEventListener('drop',event=>{event.preventDefault();const z=event.target.closest&&event.target.closest('.dropzone');if(!z)return;z.classList.remove('drag');const f=event.dataTransfer&&event.dataTransfer.files&&event.dataTransfer.files[0];if(!f)return;if(!/^image\//.test(f.type)){showToast('File harus berupa gambar (JPG, PNG, atau WebP).','error');return;}uploadImage(f,z.dataset.dropPath,z.dataset.dropFolder,z.querySelector('input[type=file]'));});
   document.addEventListener('change',event=>{const target=event.target;if(target.dataset.uploadPath){uploadImage(target.files[0],target.dataset.uploadPath,target.dataset.uploadFolder,target);}});
   document.addEventListener('click',event=>{const target=event.target.closest('button[data-action]');if(!target)return;const action=target.dataset.action; if(action==='toggle'||action==='toggle-sec'){const k=target.dataset.key;const set=action==='toggle'?state.open:state.closedSections;set.has(k)?set.delete(k):set.add(k);const y=window.scrollY;render();window.scrollTo(0,y);return;}
+    if(action==='edit'){state.edit=target.dataset.path;render();return;}
+    if(action==='close-modal'){closeModal();return;}
     if(action==='subtab'){state.sub[target.dataset.tab]=target.dataset.sub;const y=window.scrollY;render();window.scrollTo(0,y);return;}
-    if(action==='icon-pick'){pathSet(target.dataset.path,target.dataset.value);state.open.delete('icon:'+target.dataset.path);dirty();const y=window.scrollY;render();window.scrollTo(0,y);return;}if(action==='add-item'){addDefault(target.dataset.path,target.dataset.key);return;}if(action==='delete-item'){const title=target.dataset.title||'item ini';if(!confirm(`Hapus "${title}"? Tindakan ini baru berlaku di situs setelah diterbitkan.`))return;pathGet(target.dataset.path).splice(Number(target.dataset.index),1);for(const k of [...state.open])if(k.includes(target.dataset.path+'.'))state.open.delete(k);dirty();render();return;}if(action==='move-up'||action==='move-down'){const arr=pathGet(target.dataset.path);const index=Number(target.dataset.index);const next=index+(action==='move-up'?-1:1);if(next<0||next>=arr.length)return;[arr[index],arr[next]]=[arr[next],arr[index]];const ka=`${target.dataset.path}.${index}`,kb=`${target.dataset.path}.${next}`;const wa=state.open.has(ka),wb=state.open.has(kb);state.open.delete(ka);state.open.delete(kb);if(wa)state.open.add(kb);if(wb)state.open.add(ka);dirty();render();}});
+    if(action==='icon-pick'){pathSet(target.dataset.path,target.dataset.value);state.open.delete('icon:'+target.dataset.path);dirty();const y=window.scrollY;render();window.scrollTo(0,y);return;}if(action==='add-item'){addDefault(target.dataset.path,target.dataset.key);return;}if(action==='delete-item'){const title=target.dataset.title||'item ini';if(!confirm(`Hapus "${title}"? Tindakan ini baru berlaku di situs setelah diterbitkan.`))return;pathGet(target.dataset.path).splice(Number(target.dataset.index),1);{const gone=`${target.dataset.path}.${target.dataset.index}`;if(state.edit&&(state.edit===gone||state.edit.startsWith(gone+'.')))state.edit=arrayParent(target.dataset.path);}dirty();render();return;}if(action==='move-up'||action==='move-down'){const arr=pathGet(target.dataset.path);const index=Number(target.dataset.index);const next=index+(action==='move-up'?-1:1);if(next<0||next>=arr.length)return;[arr[index],arr[next]]=[arr[next],arr[index]];const ka=`${target.dataset.path}.${index}`,kb=`${target.dataset.path}.${next}`;const wa=state.open.has(ka),wb=state.open.has(kb);state.open.delete(ka);state.open.delete(kb);if(wa)state.open.add(kb);if(wb)state.open.add(ka);dirty();render();}});
   $$('.tab').forEach(tab=>tab.addEventListener('click',()=>{state.activeTab=tab.dataset.tab;render();}));$('#login-form').addEventListener('submit',login);$('#logout-button').addEventListener('click',logout);$('#reload-button').addEventListener('click',async()=>{if(state.dirty&&!confirm('Ada perubahan yang belum diterbitkan. Muat ulang akan membuang perubahan itu. Lanjutkan?'))return;await loadContent();});$('#publish-button').addEventListener('click',publish);
   (async()=>{try{await api('/api/session');showApp(true);await loadContent();}catch(_){showApp(false);}})();
 })();
