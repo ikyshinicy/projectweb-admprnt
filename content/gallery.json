@@ -68,6 +68,11 @@
       "id": "gathering",
       "label": "Gathering & Acara Instansi",
       "group": "event-organizer"
+    },
+    {
+      "id": "sablon",
+      "label": "Sablon",
+      "group": "percetakan"
     }
   ],
   "albums": [
@@ -409,6 +414,24 @@
       "category": "kartu-nama",
       "featured": false,
       "items": []
+    },
+    {
+      "id": "sablon-01",
+      "title": "Sablon",
+      "category": "sablon",
+      "featured": false,
+      "items": [
+        {
+          "type": "photo",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/sablon-1.webp",
+          "alt": "Sablon Baju"
+        },
+        {
+          "type": "photo",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/sablon-2.webp",
+          "alt": "Sablon Topi"
+        }
+      ]
     }
   ]
 }
