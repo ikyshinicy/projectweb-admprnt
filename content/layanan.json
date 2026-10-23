@@ -119,7 +119,7 @@
       "slug": "event-organizer",
       "title": "Event Organizer",
       "icon": "calendar",
-      "image": "assets/images/layanan/event-organizer.webp",
+      "image": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/layanan/event-organizer/event-organizer.webp",
       "tagline": "Perencanaan sampai pelaksanaan acara, dari konsep hingga acara selesai.",
       "lead": "Serahkan acara Anda ke tim kami: instansi, perusahaan, sekolah, komunitas, hingga acara keluarga.",
       "sectionTitle": "Yang Bisa Kami <span class=\"accent\">Tangani</span>",
