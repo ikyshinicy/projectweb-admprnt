@@ -2,13 +2,16 @@
 (() => {
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
-  const state = { content: null, baseSha: '', dirty: false, busy: false, activeTab: 'layanan', open: new Set(), closedSections: new Set(), sub: { blog: 'videos', galeri: 'albums' }, query: {}, edit: null, uploadNote: {} };
+  const state = { content: null, baseSha: '', dirty: false, busy: false, activeTab: 'layanan', open: new Set(), closedSections: new Set(), sub: { blog: 'videos', galeri: 'albums' }, query: {}, edit: null, newItem: null, uploadNote: {} };
   const PATHS = { layanan: 'content/layanan.json', blog: 'content/blog.json', galeri: 'content/gallery.json', kontak: 'content/site.json' };
   const ICONS = ['copy','idcard','banner','billboard','card','brochure','stamp','sticker','book','mug','letters','neon','signboard','bulb','car','build','clipboard','stage','sound','tent','mic','camera','food','users','heart','printer','calendar','cube'];
   const ICON_GLYPHS = {copy:'▣',idcard:'▤',banner:'▰',billboard:'▱',card:'▭',brochure:'▥',stamp:'▣',sticker:'◇',book:'▤',mug:'☕',letters:'Aa',neon:'▣',signboard:'▰',bulb:'◉',car:'▰',build:'⚒',clipboard:'▤',stage:'▱',sound:'♫',tent:'⌂',mic:'♩',camera:'◎',food:'♨',users:'♙',heart:'♡',printer:'▣',calendar:'▦',cube:'◇'};
   const LABELS = {id:'ID unik',slug:'Slug URL',title:'Judul',icon:'Ikon',image:'Gambar',tagline:'Tagline',lead:'Pengantar',sectionTitle:'Judul bagian',sectionLead:'Deskripsi bagian',ctaLead:'Ajakan kontak',items:'Daftar item',desc:'Deskripsi',categories:'Kategori',label:'Nama kategori',videos:'Video',url:'Tautan',thumb:'Sampul video',format:'Format',articles:'Artikel',source:'Sumber',date:'Tanggal',excerpt:'Ringkasan',groups:'Grup galeri',group:'Grup',albums:'Album',category:'Kategori',featured:'Tampilkan sebagai unggulan',cover:'Sampul album',alt:'Teks alternatif gambar',src:'URL foto',type:'Jenis media',whatsapp:'Nomor WhatsApp (kode negara, tanpa +)',whatsappMessage:'Pesan WhatsApp awal',address:'Alamat',openingHours:'Jam buka',instagram:'Tautan Instagram',email:'Email',image:'Gambar',sectionTitle:'Judul bagian',format:'Format video',featured:'Album unggulan'};
   const PLACEHOLDERS = {id:'contoh: kartu-nama',slug:'contoh: percetakan',whatsapp:'6281234567890',url:'https://…',image:'URL gambar atau unggah gambar',src:'URL foto atau unggah gambar',thumb:'URL sampul atau unggah gambar',cover:'URL sampul atau unggah gambar',date:'YYYY-MM-DD'};
   const SAFE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  const GAL = 'content/gallery.json';
+  const GAL_ITEMS_RE = /^content\/gallery\.json\.albums\.\d+\.items$/;
+  const GAL_ITEM_PATH_RE = /^content\/gallery\.json\.albums\.\d+\.items\.\d+\./;
   function clone(value) { return JSON.parse(JSON.stringify(value)); }
   function el(tag, cls, text) { const node = document.createElement(tag); if (cls) node.className = cls; if (text !== undefined && text !== null) node.textContent = String(text); return node; }
   function button(text, cls, action, title) { const node = el('button', cls, text); node.type = 'button'; node.dataset.action = action; if (title) node.title = title; return node; }
@@ -97,6 +100,7 @@
       return wrap;
     }
     if (key === 'sectionTitle' && path.startsWith(PATHS.layanan + '.')) return accentTitleNode(wrap, path, value);
+    if (key === 'type' && value === 'photo' && GAL_ITEM_PATH_RE.test(path)) return null;
     if (key === 'type') { const input=el('select'); [['photo','Foto'],['video','Video YouTube']].forEach(([v,l])=>{const o=el('option','',l);o.value=v;input.append(o);}); input.value=value || 'photo'; input.dataset.path=path;input.dataset.fieldInput='true';wrap.append(input);return wrap; }
     if (typeof value === 'boolean') {
       const line = el('label','inline-check'); const input = el('input'); input.type='checkbox'; input.checked=value; input.dataset.path=path; input.dataset.fieldInput='true'; line.append(input, document.createTextNode(value ? 'Ya, tampilkan sebagai unggulan' : 'Tidak')); wrap.append(line); return wrap;
@@ -203,7 +207,11 @@
     const add = button(`+ Tambah ${config.singular}`,'button secondary','add-item'); add.dataset.path = path; add.dataset.key = key; head.append(add);
     box.append(head, renderList(arr, path, key, true)); return box;
   }
-  function closeModal() { state.edit = null; render(); }
+  function discardEmptyNew() {
+    const p = state.newItem; state.newItem = null; if (!p) return;
+    try { const it = pathGet(p); if (it && it.type === 'photo' && !String(it.src || '').trim()) { const parts = splitPath(p); const idx = Number(parts.pop()); pathGet(parts.join('.')).splice(idx, 1); } } catch (_) {}
+  }
+  function closeModal() { discardEmptyNew(); state.edit = null; render(); }
   function renderModal() {
     const root = $('#modal-root'); const prev = root.querySelector('.modal-body'); const sameScroll = prev && root.dataset.path === state.edit; const sc = sameScroll ? prev.scrollTop : 0;
     root.replaceChildren(); document.body.classList.toggle('modal-open', !!state.edit); root.dataset.path = state.edit || '';
@@ -211,7 +219,7 @@
     let obj; try { obj = pathGet(state.edit); } catch (_) {}
     if (!obj) { state.edit = null; document.body.classList.remove('modal-open'); return; }
     const parts = splitPath(state.edit); const arrKey = parts[parts.length - 2]; const arrPath = parts.slice(0, -1).join('.'); const index = Number(parts[parts.length - 1]);
-    const config = sectionConfig(arrKey, arrPath); const parent = arrayParent(arrPath);
+    const config = sectionConfig(arrKey, arrPath); const parent = GAL_ITEMS_RE.test(arrPath) ? null : arrayParent(arrPath);
     const overlay = el('div','modal-overlay'); const dlg = el('div','modal'); dlg.setAttribute('role','dialog'); dlg.setAttribute('aria-modal','true');
     const head = el('div','modal-head'); const left = el('div','modal-title');
     if (parent) { const back = button('‹ Kembali','mini-button','edit'); back.dataset.path = parent; left.append(back); }
@@ -233,9 +241,79 @@
     return renderEntityArray('content/layanan.json.categories', 'categories', 'Kategori layanan', 'Halaman Percetakan, Reklame, Event Organizer, dan item layanan di dalamnya.');
   }
   function renderBlog() { return renderSections('blog',[{id:'videos',label:'Video',path:'content/blog.json.videos',key:'videos',title:'Video',desc:'Video ditampilkan sebagai tautan (YouTube, Instagram, TikTok, Facebook); file video tidak diunggah.'},{id:'articles',label:'Artikel',path:'content/blog.json.articles',key:'articles',title:'Artikel',desc:'Artikel rujukan di bagian blog. Tanggal dan tautan wajib diisi sebelum diterbitkan.'},{id:'categories',label:'Kategori',path:'content/blog.json.categories',key:'categories',title:'Kategori blog',desc:'Kategori yang tersedia untuk video dan artikel.'}]); }
-  function renderGaleri() { return renderSections('galeri',[{id:'albums',label:'Album',path:'content/gallery.json.albums',key:'albums',title:'Album galeri',desc:'Kelola sampul, unggulan, foto, dan video YouTube di setiap album.'},{id:'categories',label:'Kategori',path:'content/gallery.json.categories',key:'categories',title:'Kategori galeri',desc:'Setiap kategori harus terhubung ke satu grup.'},{id:'groups',label:'Grup',path:'content/gallery.json.groups',key:'groups',title:'Grup galeri',desc:'Grup utama untuk mengelompokkan kategori galeri.'}]); }
+  function galAlbumIdx(catId) { const out = []; state.content[GAL].albums.forEach((a, i) => { if (a.category === catId) out.push(i); }); return out; }
+  function galImages(catId) { const res = []; galAlbumIdx(catId).forEach(ai => { const album = state.content[GAL].albums[ai]; (album.items || []).forEach((it, ii) => res.push({ ai, ii, it, album })); }); return res; }
+  function imageName(it) { if (it.alt) return it.alt; const src = String(it.src || it.url || ''); return src ? src.split('/').pop() : '(belum ada gambar)'; }
+  function galImageRow(item, multiAlbum) {
+    const path = `${GAL}.albums.${item.ai}.items.${item.ii}`; const itemsPath = `${GAL}.albums.${item.ai}.items`; const len = item.album.items.length;
+    const row = el('div', 'gal-row'); const main = button('', 'row-main', 'edit', 'Edit gambar'); main.dataset.path = path; main.append(thumbNode(item.it, imageName(item.it)));
+    const name = el('div', 'gal-row-name'); name.append(el('strong', '', imageName(item.it)));
+    if (multiAlbum) name.append(el('small', '', item.album.title));
+    const actions = el('div', 'gal-actions');
+    if (item.ii > 0) { const b = button('↑', 'icon-btn', 'move-up', 'Pindah ke atas'); b.dataset.path = itemsPath; b.dataset.index = item.ii; actions.append(b); }
+    if (item.ii < len - 1) { const b = button('↓', 'icon-btn', 'move-down', 'Pindah ke bawah'); b.dataset.path = itemsPath; b.dataset.index = item.ii; actions.append(b); }
+    const e = button('Edit', 'mini-button', 'edit'); e.dataset.path = path;
+    const d = button('Hapus', 'mini-button danger', 'delete-item'); d.dataset.path = itemsPath; d.dataset.index = item.ii; d.dataset.title = imageName(item.it);
+    actions.append(e, d); row.append(main, name, actions); return row;
+  }
+  function galCategoryBlock(cat) {
+    const imgs = galImages(cat.id); const albums = galAlbumIdx(cat.id); const key = 'cat:' + cat.id; const closed = state.closedSections.has(key);
+    const box = el('div', `gal-cat${closed ? ' closed' : ''}`); const head = el('div', 'gal-cat-head');
+    const tog = button('', 'gal-toggle', 'toggle-sec'); tog.dataset.key = key;
+    tog.append(el('span', 'tri small', closed ? '▶' : '▼'), el('span', 'gal-cat-title', cat.label), el('span', 'gal-count', `${imgs.length} gambar`));
+    const tools = el('div', 'gal-cat-tools');
+    if (imgs.length) { const lab = el('label', 'inline-check feat'); const cb = el('input'); cb.type = 'checkbox'; cb.dataset.featCat = cat.id; cb.checked = albums.every(i => state.content[GAL].albums[i].featured); lab.append(cb, document.createTextNode('Tampil di beranda')); tools.append(lab); }
+    const add = button('+ Tambah gambar', 'button primary small-btn', 'img-add'); add.dataset.cat = cat.id;
+    const ren = button('Ganti nama', 'mini-button', 'cat-rename'); ren.dataset.cat = cat.id;
+    const del = button('Hapus', 'mini-button danger', 'cat-delete'); del.dataset.cat = cat.id;
+    tools.append(add, ren, del); head.append(tog, tools); box.append(head);
+    if (!closed) {
+      const rows = el('div', 'gal-rows');
+      if (!imgs.length) rows.append(el('div', 'empty', 'Belum ada gambar. Klik “+ Tambah gambar”.'));
+      imgs.forEach(item => rows.append(galImageRow(item, albums.length > 1)));
+      box.append(rows);
+    }
+    return box;
+  }
+  function renderGaleri() {
+    const g = state.content[GAL]; const wrap = el('div', 'gal-tree');
+    g.groups.forEach(group => {
+      const cats = g.categories.filter(c => c.group === group.id); const key = 'grp:' + group.id; const closed = state.closedSections.has(key);
+      const sec = el('section', `gal-group${closed ? ' closed' : ''}`); const head = el('div', 'gal-group-head');
+      const tog = button('', 'gal-toggle', 'toggle-sec'); tog.dataset.key = key;
+      tog.append(el('span', 'tri', closed ? '▶' : '▼'), el('span', 'gal-group-title', group.label), el('span', 'gal-count light', `${cats.length} type orderan`));
+      const add = button('+ Tambah type orderan', 'button primary small-btn', 'cat-add'); add.dataset.group = group.id;
+      head.append(tog, add); sec.append(head);
+      if (!closed) { const body = el('div', 'gal-body'); if (!cats.length) body.append(el('div', 'empty', 'Belum ada type orderan. Klik “+ Tambah type orderan”.')); cats.forEach(c => body.append(galCategoryBlock(c))); sec.append(body); }
+      wrap.append(sec);
+    });
+    return wrap;
+  }
+  function addGalleryCategory(groupId) {
+    const name = String(prompt('Nama type orderan baru (contoh: Spanduk, ID Card, Kartu Nama):') || '').trim().slice(0, 100); if (!name) return;
+    const g = state.content[GAL]; const base = escId(name); let id = base, n = 1; while (g.categories.some(c => c.id === id)) id = `${base}-${++n}`;
+    g.categories.push({ id, label: name, group: groupId }); state.closedSections.delete('cat:' + id); state.closedSections.delete('grp:' + groupId); dirty(); render();
+  }
+  function renameGalleryCategory(catId) {
+    const cat = state.content[GAL].categories.find(c => c.id === catId); if (!cat) return;
+    const name = String(prompt('Ganti nama type orderan:', cat.label) || '').trim().slice(0, 100); if (!name || name === cat.label) return;
+    cat.label = name; dirty(); render();
+  }
+  function deleteGalleryCategory(catId) {
+    const g = state.content[GAL]; const cat = g.categories.find(c => c.id === catId); if (!cat) return;
+    const n = galImages(catId).length;
+    if (!confirm(`Hapus type orderan "${cat.label}"${n ? ` beserta ${n} gambar di dalamnya` : ''}? Tindakan ini baru berlaku di situs setelah diterbitkan.`)) return;
+    g.albums = g.albums.filter(a => a.category !== catId); g.categories = g.categories.filter(c => c.id !== catId); dirty(); render();
+  }
+  function addGalleryImage(catId) {
+    const g = state.content[GAL]; const cat = g.categories.find(c => c.id === catId); if (!cat) return;
+    let ai = galAlbumIdx(catId)[0];
+    if (ai === undefined) { let id = `${catId}-01`, n = 1; while (g.albums.some(a => a.id === id)) id = `${catId}-${String(++n).padStart(2, '0')}`; g.albums.push({ id, title: cat.label, category: catId, featured: false, items: [] }); ai = g.albums.length - 1; }
+    const album = g.albums[ai]; album.items.push({ type: 'photo', src: '', alt: `${cat.label} ADAM XII PRINTING` });
+    const p = `${GAL}.albums.${ai}.items.${album.items.length - 1}`; state.edit = p; state.newItem = p; state.closedSections.delete('cat:' + catId); dirty(); render();
+  }
   function renderKontak() { const obj=state.content[PATHS.kontak];const section=el('div','');const head=el('div','section-head');head.append(el('div','', ''));head.firstChild.append(el('h2','','Kontak & informasi'),el('p','','Informasi ini digunakan oleh bagian kontak situs. Nomor WhatsApp wajib memakai kode negara tanpa tanda plus.'));const card=el('div','entity-card');const body=el('div','entity-body');body.append(renderObject(obj,'content/site.json',false));card.append(body);section.append(card);return section; }
-  const PAGE = { layanan: ['Layanan','Kategori layanan dan item di dalamnya.'], blog: ['Blog & Video','Video, artikel, dan kategori blog.'], galeri: ['Galeri','Album foto, kategori, dan grup galeri.'], kontak: ['Kontak & Info','Nomor WhatsApp, alamat, dan info kontak situs.'] };
+  const PAGE = { layanan: ['Layanan','Kategori layanan dan item di dalamnya.'], blog: ['Blog & Video','Video, artikel, dan kategori blog.'], galeri: ['Galeri','Pilih bidang, lalu atur type orderan dan gambar di dalamnya.'], kontak: ['Kontak & Info','Nomor WhatsApp, alamat, dan info kontak situs.'] };
   function render() {
     const pg = PAGE[state.activeTab] || PAGE.layanan; $('#page-title').textContent = pg[0]; $('#page-sub').textContent = pg[1];
     $('#section-layanan').replaceChildren(renderLayanan());$('#section-blog').replaceChildren(renderBlog());$('#section-galeri').replaceChildren(renderGaleri());$('#section-kontak').replaceChildren(renderKontak());
@@ -255,7 +333,7 @@
     for(const [file,obj] of Object.entries(all)) { if(!obj||typeof obj!=='object')errors.push(`${file}: data tidak valid.`); }
     const services=all[PATHS.layanan].categories;const serviceIds=new Set();services.forEach(c=>{if(!SAFE_ID.test(c.id||''))errors.push(`ID kategori layanan "${c.title}" tidak aman.`);if(serviceIds.has(c.id))errors.push(`ID layanan "${c.id}" duplikat.`);serviceIds.add(c.id);if(!c.title.trim())errors.push('Judul kategori layanan wajib diisi.');const itemIds=new Set();(c.items||[]).forEach(i=>{if(!i.title||!i.title.trim())errors.push(`Judul item di ${c.title} wajib diisi.`);if(!ICONS.includes(i.icon))errors.push(`Ikon ${i.icon} tidak tersedia.`);if(itemIds.has(i.title)){}itemIds.add(i.title);});});
     const blog=all[PATHS.blog];const blogCats=new Set((blog.categories||[]).map(c=>c.id));(blog.categories||[]).forEach(c=>{if(!SAFE_ID.test(c.id||''))errors.push(`ID kategori blog "${c.label}" tidak aman.`);});(blog.videos||[]).forEach(v=>{if(!v.title||!v.title.trim())errors.push('Judul video wajib diisi.');if(!blogCats.has(v.category))errors.push(`Kategori video "${v.title}" belum tersedia.`);if(!v.url||detectPlatform(v.url)==='tidak didukung'||detectPlatform(v.url)==='tautan belum valid')errors.push(`Tautan video "${v.title}" tidak didukung.`);});(blog.articles||[]).forEach(a=>{if(!a.title||!a.title.trim())errors.push('Judul artikel wajib diisi.');if(!blogCats.has(a.category))errors.push(`Kategori artikel "${a.title}" belum tersedia.`);if(!a.url||!/^https?:\/\//i.test(a.url))errors.push(`Tautan artikel "${a.title}" wajib diisi.`);if(!a.date||!a.date.trim())errors.push(`Tanggal artikel "${a.title}" wajib diisi.`);if(!a.source||!a.source.trim())errors.push(`Sumber artikel "${a.title}" wajib diisi.`);});
-    const gallery=all[PATHS.galeri];const groups=new Set((gallery.groups||[]).map(g=>g.id));const cats=new Set((gallery.categories||[]).map(c=>c.id));(gallery.categories||[]).forEach(c=>{if(!groups.has(c.group))errors.push(`Grup kategori galeri "${c.label}" tidak tersedia.`);});(gallery.albums||[]).forEach(a=>{if(!SAFE_ID.test(a.id||''))errors.push(`ID album "${a.title}" tidak aman.`);if(!cats.has(a.category))errors.push(`Kategori album "${a.title}" tidak tersedia.`);(a.items||[]).forEach(it=>{if(it.type==='video'&&detectPlatform(it.url)!=='YouTube')errors.push(`Video di album "${a.title}" harus memakai tautan YouTube.`);if(it.type==='photo'&&!it.src)errors.push(`URL foto di album "${a.title}" wajib diisi.`);});});
+    const gallery=all[PATHS.galeri];const galCatSeen=new Set();(gallery.categories||[]).forEach(c=>{if(!SAFE_ID.test(c.id||''))errors.push(`ID type orderan "${c.label}" tidak aman.`);if(galCatSeen.has(c.id))errors.push(`Type orderan "${c.label}" duplikat.`);galCatSeen.add(c.id);});const groups=new Set((gallery.groups||[]).map(g=>g.id));const cats=new Set((gallery.categories||[]).map(c=>c.id));(gallery.categories||[]).forEach(c=>{if(!groups.has(c.group))errors.push(`Grup kategori galeri "${c.label}" tidak tersedia.`);});(gallery.albums||[]).forEach(a=>{if(!SAFE_ID.test(a.id||''))errors.push(`ID album "${a.title}" tidak aman.`);if(!cats.has(a.category))errors.push(`Kategori album "${a.title}" tidak tersedia.`);(a.items||[]).forEach(it=>{if(it.type==='video'&&detectPlatform(it.url)!=='YouTube')errors.push(`Video di album "${a.title}" harus memakai tautan YouTube.`);if(it.type==='photo'&&!it.src)errors.push(`URL foto di album "${a.title}" wajib diisi.`);});});
     const site=all[PATHS.kontak];if(!/^\d{8,20}$/.test(site.whatsapp||''))errors.push('Nomor WhatsApp harus berupa angka dengan kode negara, tanpa tanda +.');
     return errors;
   }
@@ -303,12 +381,17 @@
   document.addEventListener('dragover',event=>{event.preventDefault();const z=event.target.closest&&event.target.closest('.dropzone');if(z)z.classList.add('drag');});
   document.addEventListener('dragleave',event=>{const z=event.target.closest&&event.target.closest('.dropzone');if(z&&!z.contains(event.relatedTarget))z.classList.remove('drag');});
   document.addEventListener('drop',event=>{event.preventDefault();const z=event.target.closest&&event.target.closest('.dropzone');if(!z)return;z.classList.remove('drag');const f=event.dataTransfer&&event.dataTransfer.files&&event.dataTransfer.files[0];if(!f)return;if(!/^image\//.test(f.type)){showToast('File harus berupa gambar (JPG, PNG, atau WebP).','error');return;}uploadImage(f,z.dataset.dropPath,z.dataset.dropFolder,z.querySelector('input[type=file]'));});
+  document.addEventListener('change',event=>{const t=event.target;if(t.dataset&&t.dataset.featCat!==undefined){galAlbumIdx(t.dataset.featCat).forEach(i=>{state.content[GAL].albums[i].featured=t.checked;});dirty();render();}});
   document.addEventListener('change',event=>{const target=event.target;if(target.dataset.uploadPath){uploadImage(target.files[0],target.dataset.uploadPath,target.dataset.uploadFolder,target);}});
   document.addEventListener('click',event=>{const target=event.target.closest('button[data-action]');if(!target)return;const action=target.dataset.action; if(action==='toggle'||action==='toggle-sec'){const k=target.dataset.key;const set=action==='toggle'?state.open:state.closedSections;set.has(k)?set.delete(k):set.add(k);const y=window.scrollY;render();window.scrollTo(0,y);return;}
     if(action==='edit'){state.edit=target.dataset.path;render();return;}
+    if(action==='cat-add'){addGalleryCategory(target.dataset.group);return;}
+    if(action==='cat-rename'){renameGalleryCategory(target.dataset.cat);return;}
+    if(action==='cat-delete'){deleteGalleryCategory(target.dataset.cat);return;}
+    if(action==='img-add'){addGalleryImage(target.dataset.cat);return;}
     if(action==='close-modal'){closeModal();return;}
     if(action==='subtab'){state.sub[target.dataset.tab]=target.dataset.sub;const y=window.scrollY;render();window.scrollTo(0,y);return;}
-    if(action==='icon-pick'){pathSet(target.dataset.path,target.dataset.value);state.open.delete('icon:'+target.dataset.path);dirty();const y=window.scrollY;render();window.scrollTo(0,y);return;}if(action==='add-item'){addDefault(target.dataset.path,target.dataset.key);return;}if(action==='delete-item'){const title=target.dataset.title||'item ini';if(!confirm(`Hapus "${title}"? Tindakan ini baru berlaku di situs setelah diterbitkan.`))return;pathGet(target.dataset.path).splice(Number(target.dataset.index),1);{const gone=`${target.dataset.path}.${target.dataset.index}`;if(state.edit&&(state.edit===gone||state.edit.startsWith(gone+'.')))state.edit=arrayParent(target.dataset.path);}dirty();render();return;}if(action==='move-up'||action==='move-down'){const arr=pathGet(target.dataset.path);const index=Number(target.dataset.index);const next=index+(action==='move-up'?-1:1);if(next<0||next>=arr.length)return;[arr[index],arr[next]]=[arr[next],arr[index]];const ka=`${target.dataset.path}.${index}`,kb=`${target.dataset.path}.${next}`;const wa=state.open.has(ka),wb=state.open.has(kb);state.open.delete(ka);state.open.delete(kb);if(wa)state.open.add(kb);if(wb)state.open.add(ka);dirty();render();}});
+    if(action==='icon-pick'){pathSet(target.dataset.path,target.dataset.value);state.open.delete('icon:'+target.dataset.path);dirty();const y=window.scrollY;render();window.scrollTo(0,y);return;}if(action==='add-item'){addDefault(target.dataset.path,target.dataset.key);return;}if(action==='delete-item'){const title=target.dataset.title||'item ini';if(!confirm(`Hapus "${title}"? Tindakan ini baru berlaku di situs setelah diterbitkan.`))return;pathGet(target.dataset.path).splice(Number(target.dataset.index),1);{const gone=`${target.dataset.path}.${target.dataset.index}`;if(state.edit&&(state.edit===gone||state.edit.startsWith(gone+'.')))state.edit=GAL_ITEMS_RE.test(target.dataset.path)?null:arrayParent(target.dataset.path);}dirty();render();return;}if(action==='move-up'||action==='move-down'){const arr=pathGet(target.dataset.path);const index=Number(target.dataset.index);const next=index+(action==='move-up'?-1:1);if(next<0||next>=arr.length)return;[arr[index],arr[next]]=[arr[next],arr[index]];const ka=`${target.dataset.path}.${index}`,kb=`${target.dataset.path}.${next}`;const wa=state.open.has(ka),wb=state.open.has(kb);state.open.delete(ka);state.open.delete(kb);if(wa)state.open.add(kb);if(wb)state.open.add(ka);dirty();render();}});
   $$('.tab').forEach(tab=>tab.addEventListener('click',()=>{state.activeTab=tab.dataset.tab;render();}));$('#login-form').addEventListener('submit',login);$('#logout-button').addEventListener('click',logout);$('#reload-button').addEventListener('click',async()=>{if(state.dirty&&!confirm('Ada perubahan yang belum diterbitkan. Muat ulang akan membuang perubahan itu. Lanjutkan?'))return;await loadContent();});$('#publish-button').addEventListener('click',publish);
   (async()=>{try{await api('/api/session');showApp(true);await loadContent();}catch(_){showApp(false);}})();
 })();

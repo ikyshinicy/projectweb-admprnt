@@ -180,3 +180,32 @@ body.modal-open{overflow:hidden}
   .modal-hint{display:none}
   .modal-foot{justify-content:space-between}
 }
+
+/* ===== Galeri: bidang > type orderan > gambar ===== */
+.gal-group{background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:18px;overflow:hidden}
+.gal-group-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:var(--navy);color:#fff}
+.gal-toggle{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:0;background:transparent;color:inherit;text-align:left;padding:0}
+.tri{color:#f08300;font-size:18px;line-height:1;width:20px;flex:0 0 20px}
+.tri.small{font-size:13px;width:16px;flex-basis:16px}
+.gal-group-title{font-size:21px;font-weight:800;letter-spacing:-.02em}
+.gal-count{font-size:12px;font-weight:700;color:var(--muted);background:#eef1f4;border-radius:99px;padding:2px 9px}
+.gal-count.light{background:#ffffff1f;color:#dbe4f0}
+.small-btn{padding:8px 13px;font-size:13px}
+.gal-body{padding:6px 18px 18px}
+.gal-cat{border:1px solid var(--line);border-radius:12px;margin-top:12px;background:#fff;overflow:hidden}
+.gal-cat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 14px;background:#fbfcfd}
+.gal-cat.closed .gal-cat-head{border-bottom:0}
+.gal-cat-title{font-size:17px;font-weight:750}
+.gal-cat-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.inline-check.feat{padding-top:0;font-size:12.5px;font-weight:600;color:var(--muted)}
+.gal-rows{padding:4px 14px 10px;border-top:1px solid var(--line)}
+.gal-row{display:flex;align-items:center;gap:14px;padding:9px 0;border-bottom:1px solid var(--line)}
+.gal-row:last-child{border-bottom:0}
+.gal-row .row-main{flex:0 0 auto}
+.gal-row .row-thumb{width:64px;height:64px;flex:0 0 64px;border-radius:8px}
+.gal-row-name{flex:1;min-width:0}
+.gal-row-name strong{display:block;font-size:14px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gal-row-name small{color:var(--muted);font-size:12px}
+.gal-actions{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.gal-rows .empty{border:0;padding:16px}
+@media (max-width:760px){.gal-group-head{flex-wrap:wrap}.gal-body{padding:4px 10px 14px}.gal-row{flex-wrap:wrap}.gal-row-name{flex-basis:calc(100% - 90px)}.gal-actions{width:100%;justify-content:flex-end}}
