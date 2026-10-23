@@ -125,23 +125,23 @@
       "items": [
         {
           "type": "photo",
-          "src": "assets/images/galeri/banner-acara-01/1.webp",
-          "alt": "Backdrop acara dengan cetak banner besar"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/banner-backdrop-banner-acara-1.webp",
+          "alt": "spanduk warung"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/banner-acara-01/2.webp",
-          "alt": "Spanduk outdoor terpasang"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/banner-backdrop-banner-acara-2.webp",
+          "alt": "Spanduk Idul Fitri"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/banner-acara-01/3.webp",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/banner-backdrop-banner-acara-3.webp",
           "alt": "X-banner dan roll-up banner"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/banner-acara-01/4.webp",
-          "alt": "Detail hasil cetak banner"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/banner-backdrop-banner-acara-4.webp",
+          "alt": "Billboard / Reklame"
         }
       ]
     },
@@ -204,18 +204,18 @@
       "items": [
         {
           "type": "photo",
-          "src": "assets/images/galeri/huruf-timbul-01/1.webp",
-          "alt": "Huruf timbul akrilik warna oranye"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/huruf-timbul-akrilik-1.webp",
+          "alt": "Huruf timbul ACP"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/huruf-timbul-01/2.webp",
-          "alt": "Huruf timbul stainless untuk papan nama"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/huruf-timbul-akrilik-2.webp",
+          "alt": "Huruf timbul stainless "
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/huruf-timbul-01/3.webp",
-          "alt": "Huruf timbul terpasang di dinding"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/reklame/huruf-timbul-akrilik-3.webp",
+          "alt": "Huruf timbul Arcylic"
         }
       ]
     },
