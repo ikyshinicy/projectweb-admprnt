@@ -159,3 +159,6 @@
   .album-play { width: 48px; height: 48px; }
   .lb-play { width: 68px; height: 68px; }
 }
+
+/* Video tegak (Reels, TikTok, Shorts): pemutar di tengah panggung, tidak melebar */
+.lb-video.is-portrait iframe { width: min(100%, 420px); margin: 0 auto; }

@@ -1,6 +1,6 @@
 /* ==========================================================
    gallery.js — kartu album + tampilan besar (lightbox)
-   Mendukung FOTO dan VIDEO YouTube dalam satu album.
+   Mendukung FOTO dan VIDEO (YouTube, Instagram, TikTok, Facebook) dalam satu album.
 
    Pasang di halaman dengan:
      <div class="album-grid" data-gallery data-base="../"></div>
@@ -83,7 +83,67 @@
       else if (/^(shorts|embed|live|v)$/.test(parts[0])) id = parts[1] || "";
     }
     if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return null;
-    return { id: id, start: parseTime(u.searchParams.get("t") || u.searchParams.get("start")) };
+    return { kind: "youtube", id: id, portrait: u.pathname.indexOf("/shorts/") === 0,
+             start: parseTime(u.searchParams.get("t") || u.searchParams.get("start")) };
+  }
+
+  /* ---------- Instagram (reel / post / tv) ---------- */
+  function parseInstagram(input) {
+    var s = String(input || "").trim();
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+    var u;
+    try { u = new URL(s); } catch (e) { return null; }
+    var h = u.hostname.replace(/^www\.|^m\./, "");
+    if (h !== "instagram.com" && h !== "instagr.am") return null;
+    var parts = u.pathname.split("/").filter(Boolean);
+    for (var i = 0; i < parts.length - 1; i++) {
+      if (/^(reel|reels|p|tv)$/.test(parts[i])) {
+        var code = parts[i + 1];
+        if (!/^[A-Za-z0-9_-]{5,}$/.test(code)) return null;
+        return { kind: "instagram", id: code, path: /^(reel|reels|tv)$/.test(parts[i]) ? "reel" : "p", portrait: true };
+      }
+    }
+    return null;
+  }
+
+  /* ---------- TikTok (link lengkap .../video/angka) ---------- */
+  function parseTikTok(input) {
+    var s = String(input || "").trim();
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+    var u;
+    try { u = new URL(s); } catch (e) { return null; }
+    var h = u.hostname.replace(/^www\.|^m\./, "");
+    if (h !== "tiktok.com") return null;
+    var m = /\/(?:video|v1|v2)\/(\d{8,25})/.exec(u.pathname);
+    return m ? { kind: "tiktok", id: m[1], portrait: true } : null;
+  }
+
+  /* ---------- Facebook (reel / video) ---------- */
+  function parseFacebook(input) {
+    var s = String(input || "").trim();
+    if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+    var u;
+    try { u = new URL(s); } catch (e) { return null; }
+    var h = u.hostname.replace(/^www\.|^m\.|^web\.|^mbasic\./, "");
+    if (h !== "facebook.com" && h !== "fb.com" && h !== "fb.watch") return null;
+    var path = u.pathname;
+    var isVideo = h === "fb.watch" ? path.length > 1
+      : /^\/(reels?|share\/[rv]|watch|[^/]+\/videos|video\.php)(\/|$)/.test(path) || /\/videos\/\d+/.test(path);
+    if (!isVideo) return null;
+    var href = (h === "fb.watch" ? "https://fb.watch" : "https://www.facebook.com") + path;
+    var v = u.searchParams.get("v");
+    if (v) href += "?v=" + encodeURIComponent(v);
+    return { kind: "facebook", id: href, portrait: /^\/(reels?|share\/r)(\/|$)/.test(path) };
+  }
+
+  /* Deteksi platform dari link */
+  function parseVideo(input) {
+    var s = String(input || "").trim();
+    if (!s) return null;
+    if (/instagram\.com|instagr\.am/i.test(s)) return parseInstagram(s);
+    if (/tiktok\.com/i.test(s)) return parseTikTok(s);
+    if (/facebook\.com|fb\.com|fb\.watch/i.test(s)) return parseFacebook(s);
+    return parseYouTube(s);
   }
 
   /* ---------- Normalisasi data ----------
@@ -98,13 +158,13 @@
       raw.forEach(function (it) {
         var wantsVideo = it.type === "video" || it.url || it.youtube;
         if (wantsVideo) {
-          var yt = parseYouTube(it.url || it.youtube);
+          var yt = parseVideo(it.url || it.youtube);
           if (!yt) {
-            if (window.console) console.warn("[galeri] Link YouTube tidak valid, dilewati:", it.url || it.youtube, "di album", a.id);
+            if (window.console) console.warn("[galeri] Link video tidak valid / tidak didukung, dilewati:", it.url || it.youtube, "di album", a.id);
             return;
           }
           a.items.push({
-            type: "video", id: yt.id, start: yt.start, thumb: it.thumb || "",
+            type: "video", kind: yt.kind, id: yt.id, path: yt.path || "", start: yt.start || 0, portrait: !!yt.portrait, thumb: it.thumb || "",
             title: it.title || "", alt: it.alt || (it.title ? "Video: " + it.title : "Video " + a.title)
           });
         } else {
@@ -157,6 +217,7 @@
     if (!item) return [];
     if (item.type === "video") {
       if (item.thumb) return [isAbs(item.thumb) ? item.thumb : base + item.thumb];
+      if (item.kind !== "youtube") return [];   // Instagram/TikTok/Facebook: pakai sampul buatan sendiri, atau placeholder
       return [
         "https://i.ytimg.com/vi/" + item.id + "/maxresdefault.jpg",
         "https://i.ytimg.com/vi/" + item.id + "/mqdefault.jpg"
@@ -443,6 +504,7 @@
     if (!lb) return;
     var box = lb.querySelector(".lb-video");
     box.textContent = "";
+    box.classList.remove("is-portrait");
     box.hidden = true;
     lb.querySelector(".lb-img").hidden = false;
   }
@@ -452,11 +514,27 @@
     if (!item || item.type !== "video") return;
     var box = lb.querySelector(".lb-video");
     var f = document.createElement("iframe");
-    f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(item.id) +
-      "?autoplay=1&rel=0&playsinline=1&modestbranding=1" + (item.start ? "&start=" + item.start : "");
+    if (item.kind === "instagram") {
+      f.src = "https://www.instagram.com/" + item.path + "/" + encodeURIComponent(item.id) + "/embed/";
+      f.setAttribute("scrolling", "no");
+      f.allow = "encrypted-media; fullscreen; clipboard-write";
+    } else if (item.kind === "facebook") {
+      f.src = "https://www.facebook.com/plugins/video.php?href=" + encodeURIComponent(item.id) + "&show_text=false&autoplay=true";
+      f.setAttribute("scrolling", "no");
+      f.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen";
+    } else if (item.kind === "tiktok") {
+      f.src = "https://www.tiktok.com/embed/v2/" + encodeURIComponent(item.id);
+      f.setAttribute("scrolling", "no");
+      f.allow = "autoplay; encrypted-media; fullscreen";
+    } else {
+      f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(item.id) +
+        "?autoplay=1&rel=0&playsinline=1&modestbranding=1" + (item.start ? "&start=" + item.start : "");
+      f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    }
+    f.allowFullscreen = true;
     f.title = item.title || "Video " + S.album.title;
-    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     f.referrerPolicy = "strict-origin-when-cross-origin";
+    box.classList.toggle("is-portrait", !!item.portrait);
     box.textContent = "";
     box.appendChild(f);
     box.hidden = false;
