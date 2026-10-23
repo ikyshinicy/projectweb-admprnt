@@ -376,7 +376,9 @@
   document.addEventListener('input',event=>{const target=event.target;if(target.dataset.fieldInput==='true'){const old=pathGet(target.dataset.path);pathSet(target.dataset.path,target.type==='checkbox'?target.checked:target.value);if(old!==target.value||target.type==='checkbox')dirty();const note=$(`[data-platform-for="${CSS.escape(target.dataset.path)}"]`);if(note)note.textContent=`Platform terdeteksi: ${detectPlatform(target.value)}`;}});
   document.addEventListener('input',event=>{const s=event.target;if(s.dataset&&s.dataset.searchPath!==undefined){state.query[s.dataset.searchPath]=s.value;applyFilter(s.closest('.entity-section'),s.value);return;}});
   document.addEventListener('input',event=>{const target=event.target;if(!target.dataset||!target.dataset.accentPart)return;const wrap=target.closest('.accent-field');const [i1,i2]=wrap.querySelectorAll('input');pathSet(wrap.dataset.path,composeAccent(i1.value,i2.value,wrap.dataset.after));updateAccentPreview(wrap);dirty();});
-  document.addEventListener('click',event=>{if(event.target.classList&&event.target.classList.contains('modal-overlay'))closeModal();});
+  let overlayDown=false;
+  document.addEventListener('mousedown',event=>{overlayDown=!!(event.target.classList&&event.target.classList.contains('modal-overlay'));});
+  document.addEventListener('click',event=>{const hit=event.target.classList&&event.target.classList.contains('modal-overlay');if(hit&&overlayDown)closeModal();overlayDown=false;});
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&state.edit)closeModal();});
   document.addEventListener('dragover',event=>{event.preventDefault();const z=event.target.closest&&event.target.closest('.dropzone');if(z)z.classList.add('drag');});
   document.addEventListener('dragleave',event=>{const z=event.target.closest&&event.target.closest('.dropzone');if(z&&!z.contains(event.relatedTarget))z.classList.remove('drag');});
