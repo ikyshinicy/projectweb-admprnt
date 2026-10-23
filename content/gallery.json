@@ -250,13 +250,13 @@
       "items": [
         {
           "type": "photo",
-          "src": "assets/images/galeri/souvenir-01/1.webp",
-          "alt": "Mug custom dengan logo"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/souvenir-custom-1.webp",
+          "alt": "1 Paket Souvernir"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/souvenir-01/2.webp",
-          "alt": "Topi dan kaos custom"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/souvenir-custom-2.webp",
+          "alt": "gantungan kunci"
         },
         {
           "type": "photo",
