@@ -28,8 +28,7 @@
 .cat-fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--white); opacity: .6; }
 .cat-fallback svg { width: 72px; height: 72px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-.cat-body { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 0 22px 22px; flex: 1; }
-.cat-body .icon { margin-top: -26px; position: relative; z-index: 1; border: 3px solid var(--white); box-shadow: var(--shadow-card); }
+.cat-body { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 22px 22px 22px; flex: 1; }
 .cat-body h3 { font-size: 22px; letter-spacing: -.4px; }
 .cat-body h3 a:hover { color: var(--primary-blue); }
 .cat-body > p { color: var(--text-secondary); font-size: 14px; }

@@ -101,7 +101,6 @@ function categoryCard(c, root, n) {
           <img src="${root}${c.image}" alt="Layanan ${esc(c.title)} ADAM XII PRINTING Sorong" width="800" height="500" loading="lazy">
         </a>
         <div class="cat-body">
-          <span class="icon">${svg(c.icon)}</span>
           <h3><a href="${href}">${esc(c.title)}</a></h3>
           <p>${esc(c.tagline)}</p>
           <ul class="mini-chips">${chips}${more}</ul>
