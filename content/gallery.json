@@ -102,17 +102,17 @@
       "items": [
         {
           "type": "photo",
-          "src": "assets/images/galeri/brosur-flyer-01/1.webp",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/brosur-flyer-brosur-promosi-usaha-1.webp",
           "alt": "Brosur lipat tiga untuk promosi usaha"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/brosur-flyer-01/2.webp",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/brosur-flyer-brosur-promosi-usaha-2.webp",
           "alt": "Flyer A5 full color"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/brosur-flyer-01/3.webp",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/brosur-flyer-brosur-promosi-usaha-3.webp",
           "alt": "Brosur sisi dalam"
         }
       ]
