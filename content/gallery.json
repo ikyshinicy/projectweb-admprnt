@@ -153,18 +153,18 @@
       "items": [
         {
           "type": "photo",
-          "src": "assets/images/galeri/stiker-01/1.webp",
-          "alt": "Gulungan stiker label produk"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/stiker-label-produk-1.webp",
+          "alt": "stiker label"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/stiker-01/2.webp",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/stiker-label-produk-2.webp",
           "alt": "Stiker vinyl potong kontur"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/stiker-01/3.webp",
-          "alt": "Stiker transparan pada kemasan"
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/stiker-label-produk-3.webp",
+          "alt": "Stiker pada kemasan"
         }
       ]
     },
@@ -227,17 +227,17 @@
       "items": [
         {
           "type": "photo",
-          "src": "assets/images/galeri/stempel-01/1.webp",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/stempel-otomatis-1.webp",
           "alt": "Stempel otomatis warna merah"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/stempel-01/2.webp",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/stempel-otomatis-2.webp",
           "alt": "Hasil cap stempel instansi"
         },
         {
           "type": "photo",
-          "src": "assets/images/galeri/stempel-01/3.webp",
+          "src": "https://pub-69639119c836466488f02f36f4e62fcc.r2.dev/gallery/percetakan/stempel-otomatis-3.webp",
           "alt": "Stempel manual dan otomatis"
         }
       ]
