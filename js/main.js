@@ -38,6 +38,28 @@
     if (key !== "instagram") label.textContent = val;
   });
 
+  /* ---------- Peta lokasi (Google Maps) ----------
+     [data-map-link] = tombol/tautan ke Google Maps (dari mapsLink).
+     [data-map]      = kotak peta tertanam (dari mapsQuery: koordinat atau nama tempat).
+     Kalau datanya kosong, elemennya disembunyikan. */
+  document.querySelectorAll("[data-map-link]").forEach(function (a) {
+    if (!cfg.mapsLink) { a.hidden = true; return; }
+    a.setAttribute("href", cfg.mapsLink);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("rel", "noopener");
+  });
+  document.querySelectorAll("[data-map]").forEach(function (box) {
+    if (!cfg.mapsQuery) return;
+    var f = document.createElement("iframe");
+    f.src = "https://www.google.com/maps?q=" + encodeURIComponent(cfg.mapsQuery) + "&z=17&hl=id&output=embed";
+    f.title = "Peta lokasi ADAM XII PRINTING";
+    f.loading = "lazy";
+    f.referrerPolicy = "no-referrer-when-downgrade";
+    f.setAttribute("allowfullscreen", "");
+    box.appendChild(f);
+    box.hidden = false;
+  });
+
   /* ---------- Menu mobile ---------- */
   var drawer = document.getElementById("drawer");
   var backdrop = document.getElementById("backdrop");

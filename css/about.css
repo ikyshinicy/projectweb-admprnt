@@ -24,6 +24,11 @@
 .visit-card .icon { width: 48px; height: 48px; border-radius: 14px; flex: none; }
 .visit-card b { display: block; font-size: 14px; margin-bottom: 4px; }
 .visit-card span { display: block; color: var(--text-secondary); font-size: 14px; }
+.visit-card .icon { color: var(--white); }
+.visit-link { display: inline-block; margin-top: 8px; font-size: 13px; font-weight: 800; color: var(--deep-navy); text-decoration: underline; text-underline-offset: 3px; }
+.visit-link:hover { color: var(--primary-cyan); }
+.visit-map { margin-top: 18px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color); box-shadow: var(--shadow-card); background: var(--soft-gray); }
+.visit-map iframe { display: block; width: 100%; height: 380px; border: 0; }
 
 /* ---------- Partner (logo + nama di bawah logo) ---------- */
 .partners { background: var(--soft-gray); }
@@ -50,6 +55,7 @@
 @media (max-width: 600px) {
   .about-page { padding-top: 36px; }
   .value-grid, .visit-grid { grid-template-columns: 1fr; }
+  .visit-map iframe { height: 300px; }
   .value-card h3 { font-size: 16px; }
   .bidang-grid { grid-template-columns: 1fr; }
   .partner-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
