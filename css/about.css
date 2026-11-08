@@ -11,7 +11,6 @@
 .values { background: var(--soft-gray); }
 .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .value-card { padding: 24px; display: flex; flex-direction: column; gap: 10px; }
-.value-card .icon { width: 52px; height: 52px; border-radius: 16px; margin-bottom: 4px; }
 .value-card h3 { font-size: 18px; }
 .value-card p { color: var(--text-secondary); font-size: 14px; }
 
